@@ -10,12 +10,14 @@
 		流,是一个有序变长的字节序列(sequence of bytes).输入流(input stream)将数据
 	以字节(byte)方式从一般的外部来源移动至Java程序内.输出流则将数据以字节方式移动
 	到外部目标.(有些特殊情况,流也可以将自己从java程序的一个部分移动到另一部分)
+	
 		流这个词是来自于序列和水流的比喻.输入流就像是一个向上吸水的虹吸管,输出流
 	则像一个喷射水流的软管.虹吸管可以和软管连接起来把水从一个地方移动到其他地方.
 	当它从一个有限的源头抽取水的时候,虹吸管的水会流尽.但是当它从一条河流里抽取水,
 	它也许会永远工作下去.同样的,输入流可以从一些源里读取有限的字节,比如一个文件,
 	又有一些源可能会读出无限的自己,比如System.in.同样的,一个输出流也有可能有一个
 	有限数量的字节输出,和无限的字节输出.
+	
 		对Java程序的输入,可以来自于多种源(source).输出可以到多种目标(destination).
 	这种流的比喻,好处在于,各种不同的源于目标都被抽象出去了.所有的输入输出操作都可以
 	被简单的当做流,并用同样的类和方法来处理.你不再需要为每一个不同的设备去学习一套
@@ -23,7 +25,44 @@
 	</pre>
 	<h3>Chapter 1.1.1 流从哪来?</h3>
 	<pre>
+		大多数程序员遇到的第一个输入源是System.in .这与C中的stdin一样,是某种控制台
+	窗口,可能是一个启动的Java程序.如果输入被重定向了,为了让程序读取文件,System.in也
+	会改变.例如,在Unix如下的命令使stdin重定向以使当MessageServer从System.in读取时,
+	实际的数据来源是data.txt而不是控制台.
 		
+		% java MessageServer < data.txt
+		
+		控制台同样可以用来输出,通过使用java.lang.System内的静态成员out也就是
+	System.out .这与C语言中的stdout类似,同样可以用类似的方式重定向.最后stderr则与
+	System.err类似.这被普遍的运用在调试和在catch块内打印错误信息中.例如:
+	
+		try {
+			//... do something that might throw an exception
+		}
+		catch (Exception ex) {
+			System.err.println(ex);
+		}
+		
+		System.out和System.err都是打印流(print streams),是java.io.PrintStream的
+	实例.这会在第七章中详细讨论.
+		
+		文件(Files)是另一种普通的输入源于输出目标.文件输入流提供一个从文件第一个
+	字节开始到最后一个字节结束的数据流.文件输出流向一个文件写入数据,要么擦去文件
+	原先的内容,并从头开始写入;要么追加(append)数据到文件.这将会在第四章介绍.
+	
+		网络连接同样能提供流.当你连接到一个网络服务器,FTP服务器,或者其他类型的
+	服务器,你会从一个连接到服务器的输入流读取数据,并向一个连接到服务器的输出流
+	写入数据.这些流会在第五章中介绍.
+	
+		Java程序本身可以制造流.byte array input streams, byte array output
+	streams, piped input streams和piped output streams都从Java程序的一部分向另一
+	部分移动数据.这些大多会在第九章中介绍.
+	
+		有些奇怪的是,GUI组件,比如TextArea和JTextArea并不会制造流.这里的问题是
+	排序.作为流数据的一组字节必须有确定的顺序.然而用户可以从text area或text field
+	的任意位置改变内容,而不只是从末尾.此外,用户也可能在其他线程读取流内容时删除其
+	中的文本.因此,用流从GUI组件中读取数据不是个好方法.但是,你可以使用他们产生的字
+	符串创建一个字节数组输出流或字符串读取器(string reader).
 	</pre>
   </body>
 </html>
