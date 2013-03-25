@@ -64,6 +64,65 @@
 	中的文本.因此,用流从GUI组件中读取数据不是个好方法.但是,你可以使用他们产生的字
 	符串创建一个字节数组输出流或字符串读取器(string reader).
 	</pre>
+	<h3>1.1.2 流相关类</h3>
+	<pre>
+		大多数直接操作流的类都在java.io包内.两个主要的类是java.io.InputStream
+	和java.io.OutputStream.他们是那些有更多特定能力的子类的抽象基类.
+		这些子类包括:
+	
+		BufferedInputStream
+		BufferedOutputStream
+		ByteArrayInputStream
+		ByteArrayOutputStream
+		DataInputStream
+		DataOutputStream
+		FileInputStream
+		FileOutputStream
+		FilterInputStream
+		FilterOutputStream
+		ObjectInputStream
+		ObjectOutputStream
+		PipedInputStream
+		PipedOutputStream
+		PrintStream
+		PushbackInputStream
+		SequenceInputStream
+
+		java.util.zip包,包括四个能读取压缩格式数据并返回非压缩数据格式的输入流
+	和四个能读取非压缩格式并写入压缩格式的输出流.这会在第十章讨论.
+		
+		CheckedInputStream
+		CheckedOutputStream
+		DeflaterOutputStream
+		GZIPInputStream
+		GZIPOutputStream
+		InflaterInputStream
+		ZipInputStream
+		ZipOutputStream
+		
+		java.util.jar包有两个流类用来从jar档案中读取文件.这会在第十一章讨论.
+		
+		JarInputStream
+		JarOutputStream
+		
+		java.security包内有一对流类用来计算消息摘要.
+		
+		DigestInputStream
+		DigestOutputStream
+		
+		Java加密扩展(Java Cryptography Extension JCE)增加了两个加密和解密的类.
+		
+		CipherInputStream
+		CipherOutputStream
+
+		这四个类会在第十二章讨论.
+		
+		最后,一些随机的流类藏在sun包下,例如:
+		sun.net.TelnetInputStream
+		sun.net.TelnetOutputStream
+		而这些被故意隐藏的类只作为java.io.InputStream 或 java.io.OutputStream的
+	普通实现介绍.
+	</pre>
   </body>
 </html>
 
