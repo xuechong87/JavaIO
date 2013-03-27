@@ -1,0 +1,30 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter1.3Character_Data.html</title>
+  </head>
+  
+  <body>
+    <h2>Chapter 1.3 字符数据(Character Data)</h2>
+	<pre>
+		数字类型只是典型的Java程序需要读写的数据类型之一.很多程序还需要处理文字,
+	而文字由字符组成.由于计算机真正理解的只有数字,所以字符被按照给每个字符一个对应
+	数字的方式编码.比如在ASCII编码中, 字符 A 被映射为65;B则是66;C是67等等.不同的编
+	码会按照不同的脚本进行,或者用同样的脚本以不同的方式编码.
+		
+		Java可以理解数十种包含不同语言的字符集,从ASCII到Shift Japanese Input System
+	(SJIS)或是Unicode.在Java内部则使用Unicode字符集.Unicode 是 1-byte的Latin-1字符集
+	的超超集,而Latin-1则是8-bit的,他是ASCII(7-bit)字符集的超集.
+	</pre>
+	<h3>1.3.1. ASCII</h3>
+	<pre>
+		ASCII,美国信息交换标准代码American Standard Code for Information Interchange
+	是一个7-bit的字符集.它定义了2^7或者说128个不同的字符,用0-127之间的整数代表.这些字
+	符足以处理大多数的美国英语.这是各种计算机上常用格式的最低标准.如果你从一个流中读取
+	了一个0-127的byte数据,并将起强转为char,所得到的结果就是对应的ASCII字符.
+		ASCII 字符031和字符127是非打印控制字符.字符32至47是空格和各种符号.字符48-57是
+	数字0至9.字符58-64号是另一组标点符号.字符65-90是大写字母A-Z,字符91-96是另一些符号,
+	字符97-122是小写字母a-z.最后,字符123-126是所剩不多的标点符号.
+	</pre>
+  </body>
+</html>
