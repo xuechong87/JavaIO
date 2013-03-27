@@ -12,7 +12,7 @@
 	整数(integer),字符(characters)和其他基本类型的数据的,并且了解他们为什么与何时能
 	互相转换.很多情况下,Java对这些行为的表现并不明显.
 	</pre>
-	<h3>1.2.1 整数数据(Integer Data)</h3>
+	<h3>Chapter 1.2.1 整数数据(Integer Data)</h3>
 	<pre>
 		Java中基本的整数类型为int,4字节(byte),Big-endian①,二进制补码整数.一个int型数据
 	范围为-2,147,483,648 至 2,147,483,647的整数.当你在Java源代码中敲下一段文字,比如7,
@@ -39,8 +39,74 @@
 		short s = 42000;
 	
 		尽管在这些代码中,编译器进行了特殊的类型转换,有效的把int型转换成了更小的类型.
-	</pre>
+	这是因为int数据的值在编译期已经确定,这是被编译器允许的.但是当你想把一个声明为int的
+	变量转换为short或者byte类型时,你至少需要一个显式转换.比如,看以下的代码:
+		int i = 42;
+		byte b = i;
+		
+		在编译以上代码的时候会报出这样的错误:
+		Error:    Incompatible type for declaration.
+		Explicit cast needed to convert int to short.
+		ByteTest.java  line 6
+		
+		在这种情况下,即使理论上编译器能确定这种声明不会丢失数据信息,也一样会报错,
+	你必须使用如下的显式转换:
+		int i = 42;
+		byte b = (byte) i;
+		
+		即使是两个byte变量相加返回的整数结果,也不可以直接声明为byte变量来接收.比如
+	如下的代码在编译时会报出同样的错误:
+		byte b1 = 22;
+		byte b2 = 23;
+		byte b3 = b1 + b2;
 	
+		因为这些原因,直接操作byte类型并不是很方便.在流操作类的很多方法文档注释中声称
+	是在读或写byte数据.但是,他们实际上接收和返回的数据是int型无符号byte(取值为0-255).
+	这和Java任何一种基本数据类型都不匹配.这些int数据在内部被转换为byte型.
+	
+		例如,按照Java类库中的文档说明.java.io.InputStream中的read()方法返回"the next
+	byte of data, or -1 if the end of the stream is reached"(数据的下一个字节或者当流
+	结束时返回-1).回头想想,这很奇怪.用-1怎么能区分是流数据的一部分还是流的结尾?而实际
+	上,read()方法并没有返回byte类型;他的方法签名,返回的是int:
+		public abstract int read( ) throws IOException
+		
+		这个int并不是Java中取值在-128至127的byte类型,而是更一般的无符号byte,取值范围
+	为0至255.因此,-1可以简单有效的区分从流中读取的数据.
+		
+		java.io.OutputStream中的write()方法有同样的问题.它返回void但是用int作为输入
+	参数:
+		public abstract void write(int b) throws IOException
+	
+		这个int本意是一个从0-255的无符号byte值.但是没什么能阻止一个粗心的程序员把一个
+	超出范围的int值传入到方法中.在这种时候,int值的后8bit会被写入,前面24bit则会被忽略:
+		b = b & 0x000000FF;
+	
+		尽管这种行为在Java语言规范(Java Language Specification)中描述过,但是write()
+	方法是抽象的,实际的实现取决于具体的子类,粗心的程序员可能会做不合约定的事.
+	
+		另一方面,真正Java的byte类型在读取或入byte数组的方法中出现.例如:
+	请考虑java.io.InputStream中的两个read()方法:
+		public int read(byte[] data) throws IOException
+		public int read(byte[] data, int offset, int length) throws IOException
+
+		对于一个数字来讲,8bit的byte和32bit的int可能区别不大,但是当你想要读取几千甚至
+	几百万的数字的时候,这种区别就非常明显了.实际上,一个byte类型数据始终需要在JVM中占
+	用4个字节的空间.但是一个byte数组却只占用他们实际需要的空间.虚拟机在草走byte数组时
+	有特殊的指令,但是对于单个byte数据却没有.单个byte数据只是被简单的升级成int来操作.
+	
+		尽管数据被存储在有符号的(-128至127)Java byte数组中,但是有一个简单的一对一规则
+	来使Java的有符号byte型与I/O中通常使用的无符号byte进行对应.这个规则的公式如下:
+	
+		int unsignedByte = signedByte >= 0 ? signedByte : 256 + signedByte;
+		
+
+
+
+		
+
+	
+	</pre>
+	<hr/>
 	<pre>
 	译注:
 	①:Big-endian按照最高位字节(包含最高位，即MSB，的字节)至最低位字节(包含最低位,
