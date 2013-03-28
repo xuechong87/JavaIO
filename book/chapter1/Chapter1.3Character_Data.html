@@ -16,7 +16,7 @@
 	(SJIS)或是Unicode.在Java内部则使用Unicode字符集.Unicode 是 1-byte的Latin-1字符集
 	的超超集,而Latin-1则是8-bit的,他是ASCII(7-bit)字符集的超集.
 	</pre>
-	<h3>1.3.1. ASCII</h3>
+	<h3>1.3.1 ASCII</h3>
 	<pre>
 		ASCII,美国信息交换标准代码American Standard Code for Information Interchange
 	是一个7-bit的字符集.它定义了2^7或者说128个不同的字符,用0-127之间的整数代表.这些字
@@ -28,7 +28,7 @@
 		这些会在字符集表的
 		<a href="../appendix/character_set.html" target="blank">A-1</a>表中列出
 	</pre>
-	<h3>1.3.2. Latin-1</h3>
+	<h3>1.3.2 Latin-1</h3>
 	<pre>
 		ISO 8859-1, Latin-1是一个8bit字符集,是ASCII严谨的超集.它定义了2^8也就是
 	256个字符,取值范围从0到255.其中前128个字符,这些最高位数为0的数字直接与ASCII
@@ -39,7 +39,7 @@
 	Latin-1字符在<a href="../appendix/character_set.html" target="blank">A-2</a>表中列出.
 	如果你从一个流中读取无符号byte值并强转成char型,得到的结果就会对应Latin-1字符.
 	</pre>
-	<h3>1.3.3. Unicode</h3>
+	<h3>1.3.3 Unicode</h3>
 	<pre>
 		Latin-1足以满足大多数西欧语言(当然希腊语明显是个例外),但是它没有足够的位
 	置来放下西里尔文,希腊文,阿拉伯文,希伯来文,梵文字符更不要说像中文和日文这类象形
@@ -66,5 +66,23 @@
 	用1byte来表示ASCII字符,用2byte表示其他字幕,用3-4byte表示亚洲语言中的字符.Java
 	的.class文件内部用UTF-8来存储字符串文字.
 	</pre>
+	<h3>Chapter 1.3.4 其他编码</h3>
+	<pre>
+		ASCII,Latin-1,和Unicode并不是唯一普遍使用的字符集,尽管他们是被Java最直接
+	处理的编码.还有很多不同的字符集,有的是用不同的脚本编码,有的则是使用同样的脚本用其
+	他方式编码.例如,IBM大型机一直使用一种名EBCDIC的为非ASCII字符集.EBCDIC有着和ASCII
+	几乎一样的字符,但是给了他们不同的数字对应.Macintoshes电脑通常使用8bit编码被称为
+	MacRoman的编码,它在前128字符与ASCII相同,后128个字符基本与Latin-1相同但是有不同的
+	数字位置.DOS(包括windows的DOS shell)使用Cp850编码,包含了框绘制字符(box drawing 
+	characters )比如下列字符:
+	<img src="image/char1.jpg"/><img src="image/char2.jpg"/><br/>
+		Big-5 和 SJIS是中文与日文的编码,这届脚本包含了非常多的字符.
+	
+		每种编码的具体细节是非常复杂的,应该丢给专家去处理.幸运的是,Java类库包含了一个
+	由这种专家编写的reader和writer类集.reader与writer可以在不用其他帮助的情况下将byte
+	数据转换为特定编码的Java char.因此,在书写文字的时候你应该使用writer而不是一个输出
+	流,这些会在第20章讨论
+	</pre>
+	<h3>Chapter 1.3.5 字符类型(The char Data Type)</h3>
   </body>
 </html>
