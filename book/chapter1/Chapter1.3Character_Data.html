@@ -82,7 +82,29 @@
 	由这种专家编写的reader和writer类集.reader与writer可以在不用其他帮助的情况下将byte
 	数据转换为特定编码的Java char.因此,在书写文字的时候你应该使用writer而不是一个输出
 	流,这些会在第20章讨论
+	
 	</pre>
 	<h3>Chapter 1.3.5 字符类型(The char Data Type)</h3>
+	<pre>
+		Java中的文本主要是由基本类型char,char数组,和内部由char数组实现的String来组成.
+	就像你必须先理解byte才能高清楚输入与输出是如何工作的一样,你必须先了解char才能理解
+	reader和writer的工作原理.
+	
+		在Java中,char是个2byte,无符号整数,Java中唯一的无符号类型.所以,char的可能取值
+	为0-65535(0xFFFF).每一个char代表一个Unicode中的字符.char可以用在其取值范围内的int
+	文字表达进行赋值:
+		char copyright = 169;
+	
+		char也可以用单引号进行赋值:
+		char copyright = '©';
+
+		在sun的javac编译器中可以把多种不同的编码翻译成Unicode,通过使用-encoding指令
+	以指定输出文件的编码:例如,如果你知道一个源文件是用ISO 8859-1写的,那你可以这样编译:
+		% javac -encoding 8859_1 CharTest.java
+
+		可使用的编码会在表A-4中列出
+
+
+	</pre>
   </body>
 </html>
