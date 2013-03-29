@@ -18,7 +18,7 @@
 	throw或者在try/catch块中捕获.唯一真正出现的例外是PrintStream和PrintWriter类.因为
 	在调用System.out.println()方法时加上try/catch会很不方便,所以Sun公司决定让
 	PrintStream(和之后的PrintWriter)捕获并吞掉所有print()或println()方法中出现的异常.
-	如果你想在调用print()或println()方法时检查内部的异常,可以调用checkError()方法:
+	如果你想在调用print()或println()方法时检查内部的异常,可以调用checkError()①方法:
 		public boolean checkError()
 	
 		IOException仅仅在在java.io包内就有15个子类,方法通常会抛出一个更详细的
@@ -35,7 +35,7 @@
 	的信息.当然IOException也有其他所有Exception类都拥有的方法比如toString()和
 	printStackTrace().
 	
-		*Java6增加了IOError类:"当出现了严重的I/O错误的时候抛出".Xueming Shen①从后门
+		*Java6增加了IOError类:"当出现了严重的I/O错误的时候抛出".Xueming Shen②从后门
 	偷偷放了这个类进去,只是为了避免在新的Console类中抛出他们本该抛出的IOException.我不
 	知道这个累赘是否会在Java6的最终版本中存在.但是当我编写这本书的时候,我正努力游说他
 	们把这个类删掉,或者至少换成一个运行时异常(runtime exception),而不是一个错误(error)
@@ -43,7 +43,16 @@
 	</pre>
 	<hr/>
 	<pre>
-		译者注:①Xueming Shen :java.io.IOError的作者.在查看Java6的源码时,我们可以看到
+		译者注:
+		①实际的使用是这样的:
+			System.out.println("test");
+			boolean flag = System.out.checkError();
+		checkError()的注释中对返回值的说明为:
+		true if and only if this stream has encountered an IOException 
+		other than InterruptedIOException, or the setError method has been invoked
+		
+		
+		②Xueming Shen :java.io.IOError的作者.在查看Java6的源码时,我们可以看到
 	这个类的doc上是这样写的:
 		/**
 		 * Thrown when a serious I/O error has occurred. 
