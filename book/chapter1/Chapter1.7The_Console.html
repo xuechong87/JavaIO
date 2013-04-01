@@ -36,13 +36,36 @@
 		System.out相当于Unix或者C语言中的stdout.一般来说,被发送到System.out的输出会在
 	控制台中显示.作为基本规则,控制台将System.out发送给它的整数字节数据转换成ASCII或
 	Latin-1文本.所以如下的代码会在控制台上写出"Hello World!":
-	byte[] hello = {72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33, 10,
-                13};
+	byte[] hello = {72,101,108,108,111,32,87,111,114,108,100,33,10,13};
 	System.out.write(hello);
 	</pre>
 	<h3>1.7.2 System.err</h3>
 	<pre>
+		Unix和C的程序员对stderr很熟悉,它通常被用在错误信息中.stderr是与stout不同的
+	文件指针,但是很多时候是一个东西.基本上来讲,不论数据是什么,stderr和stdout都将数据发
+	送到控制台,但是,stdout和stderr可以被重定向到不同的位置.比如说,输出可以被重定向到一
+	个文件中,而错误信息可以继续在控制台显示.
+		System.err是Java版的stderr.与System.out一样,System.err是java.io.OutputStream
+	子类java.io.PrintStream的实例.System.err大多用在try/catch语句块中,如下:
+		try {
+		  // Do something that may throw an exception.
+		}
+		catch (Exception ex) {
+		  System.err.println(ex);
+		}
+
+		只是完成程序并不需要用很多System.err,但是这在你调试的时候很有用.
 		
+	</pre>
+	<pre style="border:1px solid black;">
+		*类库永远都不应该用System.err打印任何东西.原则上说,类库不应该和用户有交流,除非有
+	特殊目的.作为取代,类库应该通过抛出异常或调用某种异常处理对象中的回调函数来及时通知客户端
+	他们遇到的任何问题.是的!Xerces!我在说你!(Xerces XML parser,内置在Java5中,他们有个非常讨厌
+	的习惯,即使是非致命性错误也会用System.err打印)
+	</pre>
+	<h3>1.7.3 System.in</h3>
+	<pre>
+	
 	</pre>
   </body>
 </html>
