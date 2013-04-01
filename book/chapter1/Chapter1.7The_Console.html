@@ -26,5 +26,23 @@
 	浏览器运行applet有时会提供一个用于输出的控制台.但是它默认是隐藏的,一般也不能用作
 	输入,也并非在所有平台上的所有浏览器都可用.
 	</pre>
+	<h3>1.7.1 System.out</h3>
+	<pre>
+		System.out是大多数程序员遇到的OutputStream类的第一个实例.实际上,很多时候在学
+	生还不知道什么是类或者什么是输出流的时候就已经知道它了.具体的说,System.out是
+	java.lang.System类的静态成员out.是java.io.OutputStream子类java.io.PrintStream的
+	实例.
+		
+		System.out相当于Unix或者C语言中的stdout.一般来说,被发送到System.out的输出会在
+	控制台中显示.作为基本规则,控制台将System.out发送给它的整数字节数据转换成ASCII或
+	Latin-1文本.所以如下的代码会在控制台上写出"Hello World!":
+	byte[] hello = {72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33, 10,
+                13};
+	System.out.write(hello);
+	</pre>
+	<h3>1.7.2 System.err</h3>
+	<pre>
+		
+	</pre>
   </body>
 </html>
