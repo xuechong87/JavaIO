@@ -58,6 +58,7 @@
 		
 	</pre>
 	<pre style="border:1px solid black;">
+		
 		*类库永远都不应该用System.err打印任何东西.原则上说,类库不应该和用户有交流,除非有
 	特殊目的.作为取代,类库应该通过抛出异常或调用某种异常处理对象中的回调函数来及时通知客户端
 	他们遇到的任何问题.是的!Xerces!我在说你!(Xerces XML parser,内置在Java5中,他们有个非常讨厌
@@ -65,6 +66,28 @@
 	</pre>
 	<h3>1.7.3 System.in</h3>
 	<pre>
+		System.in是连接到控制台的输入流,就像System.out是连接到控制台的输出流一样.在Unix或C
+	中,System.in对应stdin并且也可以重定向到一个外壳程序.System.in是java.lang.System类的静态成
+	员in.是java.io.InputStream的实例,至少文档中是这么说的.
+	
+		忘了那些过时的文档吧,System.in实际上是一个java.io.BufferedInputStream.
+	BufferedInputStream没有定义任何新方法;它只是重新了java.io.InputStream的方法.带缓存的输入
+	流把大块数据读进一个缓存,然后将其包装称请求的尺寸.这比每次读取一个字符要有效率的多.否则,
+	数据对程序员来说就是完全透明的了.
+	
+		这样做的主要原因是:在用户向System.in中输入字节(byte)的时候,字节并不可在程序中使用.
+	相反的,每次只向程序输入一行.这可以让用户向控制台中多次输入退格键来修正错误.Java不允许你
+	将控制台设置成每个字符(包括退格和删除)在输入后都马上可用的"raw"模式.
+	
+		用户想控制台输入时使用平台的默认字符集,一般是ASCII或其超集.数据在读取时会被转换成
+	整数字节(numeric bytes).例如,如果用户输入了"Hello World!"并回车,程序会从System.in中按以下
+	顺序读出字节:
+		72,101,108,108,111,32,87,111,114,108,100,33,10,13
+		
+		很多运行在命令行并从System.in中读取输入的程序需要你输入一个"流结尾"的字符,也叫做"文
+	件结尾"或者EOF字符来正常的结束程序.至于怎么输入这个字符,取决于平台.在Unix和Mac系统中,
+	Ctrl-D一般代表流的结尾.在Windows中,则是Ctrl-Z.有些时候,可能需要在单独的一行中输入这些字符
+	也就是,你需要输入Enter/Ctrl-Z或Enter/Ctrl-D让Java知道这是流的结尾.
 	
 	</pre>
   </body>
