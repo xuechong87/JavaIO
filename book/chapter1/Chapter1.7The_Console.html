@@ -1,0 +1,30 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter 1.7 The Console</title>
+  </head>
+  
+  <body>
+    <h2>Chapter 1.7 控制台(The Console: System.out, System.in, and System.err)</h2>
+	<pre>
+		控制台是System.out和System.err的默认输出位置,也是System.in的默认输入位置.
+	在大多数平台上,控制台都是一个Java程序启示的命令行环境,可能是xterm或者是个如图1-1中
+	的DOS提示符.控制台这个词有些用词不当,在Unix中,系统的控制台指的是一个非常具体的命令
+	行外壳程序(command-line shell),而不是指所有的命令行shell.
+	</pre>
+		<center>
+			<h4>图1-1 Windows中的DOS控制台</h4>
+			<img src="image/dos_console.jpg"/>
+		</center>
+	<pre>
+		很多常见的对I/O的误解,是因为多数程序员一开始是通过控制台接触I/O.控制台在在快
+	速解决问题时很好用,在教材中的小示例中也很常见,而我在这本书中也会用它做示例,但是作
+	为输入源和输出目标来讲,控制台却很不常用,好的Java程序应该避免它.与其他你要读写的东
+	西相比,控制台的表现差不多,但是并不完全.虽然控制台在作示例时就想上图一样很方便好用,
+	但是他们的用户界面非常糟糕,在当今的程序中几乎有一席之地.有良好设计的GUI程序会让用
+	户更舒服.此外,控制台在跨平台时并不可靠.很多小型设备如掌上电脑和手机都木有控制台.
+	浏览器运行applet有时会提供一个用于输出的控制台.但是它默认是隐藏的,一般也不能用作
+	输入,也并非在所有平台上的所有浏览器都可用.
+	</pre>
+  </body>
+</html>
