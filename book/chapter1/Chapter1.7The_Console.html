@@ -88,7 +88,26 @@
 	件结尾"或者EOF字符来正常的结束程序.至于怎么输入这个字符,取决于平台.在Unix和Mac系统中,
 	Ctrl-D一般代表流的结尾.在Windows中,则是Ctrl-Z.有些时候,可能需要在单独的一行中输入这些字符
 	也就是,你需要输入Enter/Ctrl-Z或Enter/Ctrl-D让Java知道这是流的结尾.
-	
 	</pre>
+	<h3>1.7.4 重定向System.out,System.in和System.err</h3>
+	<pre>
+		在外壳程序中,你通常会重定向stdout,stdin,或者stderr.例如,指定Java程序
+	OptimumBattingOrder的输出到文件yankees06.out并从yankees06.tab读取输入,你可以用以下代码:
+		% java OptimumBattingOrder < yankees06.tab > yankees06.out
+
+		在DOS shell中的重定向也是一样的.
+		
+		有些时候在运行中的程序内部重定向System.out,System.in,和System.err会更方便.在
+	java.lang.System中如下的三个静态方法就可以做到:
+		public static void setIn(InputStream in)
+		public static void setOut(PrintStream out)
+		public static void setErr(PrintStream err)
+		
+		例如,指定System.out的数据发送到文件yankees99.out中,并指定System.in从yankees99.tab
+	中读取数据,可以使用如下代码:
+		System.setIn(new FileInputStream("yankees99.tab"));
+		System.setOut(new PrintStream(new FileOutputStream("yankees99.out")));
+	</pre>
+	
   </body>
 </html>
