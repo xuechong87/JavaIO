@@ -108,6 +108,30 @@
 		System.setIn(new FileInputStream("yankees99.tab"));
 		System.setOut(new PrintStream(new FileOutputStream("yankees99.out")));
 	</pre>
+	<h3>1.7.5 Java6中的控制台类(The Console Class // Java 6)</h3>
+	<pre>
+		在构建Java6时,Sun公司终于对狙击Python和Ruby社区中对与Java读取控制台输入有多麻烦的
+	抱怨感到疲倦了.在大多数脚本语言中,这只需要一行代码,不过与Java中传统方式相比这得到了一些
+	改善.
+	</pre>
+	<pre style="border:1px solid black;">
 	
+		*与其他语言相比,在Java中读取控制台输入要简单的多,因为在2006年除了大学计算机课程外,
+	没人会需要这么做.真正的应用程序使用GUI或者网络作为用户界面,而不是控制台,而Java移植专注于
+	解决真正的问题,而不是课本上的小示例.
+	
+	</pre>
+	<pre>
+		Java6增加了新的java.lang.Console类,提供了一些便利的输入和输出方法.这个类是单例类.
+	他永远不会有超过一个实例,并总是适用于和System.in,System.out,和System.err指向的外壳程序.
+	你可以用过静态方法System.console()来查找它的实例:
+		Console theConsole = System.console();
+	
+		在一些没有控制台的环境中,如手机或者浏览器中运行此方法,会返回null;
+
+		你可以用很多方式来使用这个类.最重要的是,有一个很简单的readLine()方法,可以从控制台
+	中返回单独的一行文字,不包括换行符:
+		public String readLine() throws IOError
+	</pre>
   </body>
 </html>
