@@ -132,6 +132,14 @@
 		你可以用很多方式来使用这个类.最重要的是,有一个很简单的readLine()方法,可以从控制台
 	中返回单独的一行文字,不包括换行符:
 		public String readLine() throws IOError
+		
+		这个方法会在流结束的时候返回null.并且会在发生任何I/O错误的时候抛出IOError.(再一次的,
+	这是个设计错误,我还在劝说Sun公司在最终发行版前将其修复.这个方法应该和其他正常的方法一样在
+	出错时抛出一个IOException)
+	
+		你可以选择在读取一行之前提供一个格式化提示:
+		public String readLine(String prompt, Object... formatting)
+
 	</pre>
   </body>
 </html>
