@@ -1,4 +1,4 @@
-﻿package com.xuechong.learn.io.chapter1;
+﻿package chapter1;
 
 import java.io.Console;
 
