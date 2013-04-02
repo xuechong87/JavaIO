@@ -137,9 +137,81 @@
 	这是个设计错误,我还在劝说Sun公司在最终发行版前将其修复.这个方法应该和其他正常的方法一样在
 	出错时抛出一个IOException)
 	
-		你可以选择在读取一行之前提供一个格式化提示:
-		public String readLine(String prompt, Object... formatting)
+		你可以选择在读取一行之前提供一个格式化过的提示字符(chapter1.Test1_7_5.promptTest):
+		public String readLine(String prompt, Object... formatting);
+		
+		提示字符串的解析与printf()方法中的一样而参数要放在它的右面.这些东西做的只是格式化
+	提示字符!这与scanf()方法不同.返回值与无参数的readLine()方法是一样的.
+	
+		Console还体统了两个readPassword()方法:
+		public char[] readPassword()
+		public char[] readPassword(String prompt, Object... formatting)
 
+		与readLine()不同,这些方法不会显示输入的内容.还要提醒的是他们返回一个char数组,而不是
+	一个String.当你结束输入的时候,你可以把这些字符全覆盖成0,已使这些密码在用过之后就从内存中
+	消失.这种机制限制了密码暴露于内存扫描器或由于虚拟内存而存储在硬盘上的可能性.
+	
+		对于输出,Console提供了两个方法,printf()和format()
+		public Console format(String format, Object... arguments)
+		public Console printf(String format, Object... arguments)
+
+		这两个方法没有不同之处,他们是同义词①.例如,如下代码只使用printf()打印出三列的表格,
+	内容为从0-360度角的角度,弧度和梯度(百分度).每个数字为5位宽,小数点后保留一位:
+		Console console = System.console( );
+		for (double degrees = 0.0; degrees &lt; 360.0; degrees++) {
+			double radians = Math.PI * degrees / 180.0;
+			double grads = 400 * degrees / 360;
+			console.printf("%5.1f %5.1f %5.1f\n", degrees, radians, grads);
+		}
+		
+		这里是输出结果最开始的一段:
+		0.0   0.0   0.0
+		1.0   0.0   1.1
+		2.0   0.0   2.2
+		3.0   0.1   3.3
+		...
+
+
+		在第七章我们会进一步探索printf()和他的格式化参数.
+		
+		控制台通常在遇到换行符之前会缓存所有的输出.你可以用flush()方法在换行前强制将要写的
+	数据显示在屏幕上:
+		formatter.flush( );
+		formatter.close( );
+
+		最后,如果这些方法对你还不够用,你可以直接操作与控制台相关联的PrintWriter和Reader:
+		public PrintWriter writer( )
+		public Reader      reader( )
+
+		在第二十章我们会讨论这两个类.
+		
+		示例1-1是一个简单的程序,用Console类来解决一个典型的家庭作业:让用户输入一个1-10之间
+	的整数.并打印出从1到这个数中所有数字的平方.在保留程序原意同时,我至少在这段代码中留下了三
+	个学生会出的典型的bug.找到并改正这些错误是留给读者的家庭作业:
+	</pre>
+	<h4>示例1-1</h4>
+	<pre style="border:1px solid black;">
+		import java.io.*;
+		class Homework {
+			public static void main(String[] args) {
+				Console console = System.console( );
+				String input = console.readLine(
+				  "Please enter a number between 1 and 10: ");
+				int max = Integer.parseInt(input);
+				for (int i = 1; i &lt; max; i++) {
+				  console.printf("%d\n", i*i);
+				}
+			}
+		}
+	</pre>
+	<hr/>
+	<pre>
+		译者注:
+			①实际上在Java6中 printf的实现只是直接调用了format方法,Java6源码:
+			
+			public Console printf(String format, Object ... args) {
+				return format(format, args);
+			}
 	</pre>
   </body>
 </html>
