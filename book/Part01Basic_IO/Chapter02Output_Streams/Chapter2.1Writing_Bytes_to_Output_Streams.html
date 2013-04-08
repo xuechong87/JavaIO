@@ -35,6 +35,41 @@
 			}
 		}
 	</pre>
-	
+	<pre>
+		请注意char字符'\t'和'\n'.编译器会分别将他们转换成9和10.当这些数字被写入到控制台时,
+	控制台会将他们解析成一个tab和一个换行符.按如下的方式写if语句块能产生同样的效果:
+		if (i % 8 == 7) System.out.write(10);
+		else System.out.write(9);
+
+		这里是程序输出的结果:
+		% java AsciiChart
+		
+		!       "       #       $       %       &       '
+		(       )       *       +       ,       -       .       /
+		0       1       2       3       4       5       6       7
+		8       9       :       ;       <       =       >       ?
+		@       A       B       C       D       E       F       G
+		H       I       J       K       L       M       N       O
+		P       Q       R       S       T       U       V       W
+		X       Y       Z       [       \       ]       ^       _
+		`       a       b       c       d       e       f       g
+		h       i       j       k       l       m       n       o
+		p       q       r       s       t       u       v       w
+		x       y       z       {       |       }       ~
+
+
+		write()方法可以抛出一个IOException,所以你需要把大部分调用语句都放在try/catch语句
+	块中,或者在你自己的方法上加上抛出IOException的声明,比如
+		try {
+			for (int i = 32; i &lt;= 127; i++) out.write(i);
+		}
+		catch (IOException ex) {
+		  System.err.println(ex);
+		}
+
+		细心的读者可能发现了在示例2-1中并没有catch任何IOException.PrintStream类,也就是
+	System.out的类型,变种的重写了write()方法.这是一个特例,几乎只有PrintStream类这样做了.在第
+	七章中我会更多的讨论PrintStream类,包括这种不安全的行为.
+	</pre>
   </body>
 </html>
