@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter2.3 Closing Output Streams</title>
+  </head>
+  
+  <body>
+	<h1>Chapter 2.3 关闭输出流(Closing Output Streams)</h1>
+	<pre>
+		当你用完了一个流后,你应该把它关掉.这可以让操作系统释放所有与流关联的资源.确切的说,
+	这些资源取决于你的平台和流的类型.然而,很多系统的资源是有限的.例如在一些个人电脑的操作系统
+	中,不可能同时打开几百个文件.多用户操作系统有更大的上限,但仍然是有限的.
+	
+		关闭一个流,需要调用close方法():
+		public void close( ) throws IOException
+
+		例如,再次假设out对象是一个OutputStream,使用out.close()来关闭这个流并释放所有相关
+	资源,如与该流关联的文件句柄或网络端口.
+		
+		一旦你关闭了一个输出流,你可能就在也不能在这个流上面写东西了.尝试继续写会引发一个
+	IOException,但是也有很少的几个类不会这样.
+	</pre>
+	<pre style="border:1px solid gray;">
+		再一次重申,System.out是一个特例,因为作为一个PrintStream类的对象,所有抛出的异常都
+	被吞掉了.当你关掉了System.out之后你就不能继续向其写入东西.但是这样做不会引发任何异常;但是
+	你的输出也不会显示在控制台中
+	</pre>
+	<pre>
+		
+	</pre>
+  </body>
+</html>
