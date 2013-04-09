@@ -26,7 +26,44 @@
 	你的输出也不会显示在控制台中
 	</pre>
 	<pre>
+		不是所有的流都需要关闭,比如字节数组的输出流就不需要关闭.然而对于与文件或网络连接
+	关联的流来说,在你操作完成后总是应该将其关闭的.例如如果你打开了一个文件写入东西并忘了关闭
+	,那么当其他对此文件的读写操作可能会因此而阻塞.通常关闭文件应该这样做:
+		try {
+			OutputStream out = new FileOutputStream("numbers.dat");
+			// Write to the stream...
+			out.close( );
+		}
+		catch (IOException ex) {
+			System.err.println(ex);
+		}
+
+		但是这段代码有个潜在的问题.如果在写文件时抛出了一个IOException,那么流是不会被关闭的.
+	更靠谱的是在finally语句块中关闭流,这样无论是否出现异常流都可以被关闭.你需要在try语句外定
+	义OutputStream的变量以完成这个操作,例如:
+		// Initialize this to null to keep the compiler from complaining
+		// about uninitialized variables
+		OutputStream out = null;
+		try {
+			out = new FileOutputStream("numbers.dat");
+			// Write to the stream...
+		}
+		catch (IOException ex) {
+			System.err.println(ex);
+		}
+		finally {
+			if (out != null) {
+				try {
+					out.close( );
+				}
+				catch (IOException ex) {
+					System.err.println(ex);
+				}
+			}
+		}
 		
+		
+
 	</pre>
   </body>
 </html>
