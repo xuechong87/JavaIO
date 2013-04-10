@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Chapter2.3 Closing Output Streams</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
   </head>
   
   <body>
@@ -20,7 +21,7 @@
 		一旦你关闭了一个输出流,你可能就在也不能在这个流上面写东西了.尝试继续写会引发一个
 	IOException,但是也有很少的几个类不会这样.
 	</pre>
-	<pre style="border:1px solid gray;">
+	<pre class="annotation">
 		再一次重申,System.out是一个特例,因为作为一个PrintStream类的对象,所有抛出的异常都
 	被吞掉了.当你关掉了System.out之后你就不能继续向其写入东西.但是这样做不会引发任何异常;而
 	你的输出也不会显示在控制台中
