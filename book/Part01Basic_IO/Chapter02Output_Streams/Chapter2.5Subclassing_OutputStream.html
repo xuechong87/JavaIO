@@ -55,12 +55,13 @@
 	到这个流需要在写东西前检查此流是否已经被关闭了,并检查被传入的数组是否是null.很多子类也会
 	需要做同样的检查.
 	
-		在你程序的shipping version中把System.out和System.err重定向到一个NullOutputStream
-	你可以禁用任何可能溜过质量保证的调试信息:例如
-	OutputStream out = new NullOutputStream( );
-	PrintStream ps = new PrintStream(out);
-	System.setOut(ps);
-	System.setErr(ps);
+		在你的样板程序中把System.out和System.err重定向到一个NullOutputStream后,你就可以
+	禁用任何可能从质量检验中漏掉的调试信息:
+	
+		OutputStream out = new NullOutputStream( );
+		PrintStream ps = new PrintStream(out);
+		System.setOut(ps);
+		System.setErr(ps);
 	</pre>
   </body>
 </html>
