@@ -10,9 +10,65 @@
 	</h2>
 	<pre>
 		我将会用javax.swing.JTextArea的一个可以与输出流连接的子类做为示例.当数据被写入到
-	流中,它会在文本域中以默认字符集来显示.(这并不是个好主意,因为)
+	流中,它会在文本域中以默认字符集来显示.(这并不是个好主意,因为文本域显示文本,而writer作
+	为它的数据源更合适.在之后的章节,用writer来扩展这个类.现在这只是做了个漂亮的例子)这个子
+	类会在示例2-4中显示.
 		
-		System.setErr(ps);
+		实际的输出流类是JStreamedTextArea 的内部类.每个JStreamedTextArea控件在其成员变量
+	theOutput中保存了一个TextAreaOutputStream 类的对象.客户端程序员通过getOutputStream()方
+	法访问这个对象.JStreamedTextArea类有4个重载的构造函数,模仿了javax.swing.JTextArea类,每
+	个构造函数接受不同文本,行和列的组合.前三个构造函数只是通过this()将其参数和对应的默认值
+	传给了最常用的第四个构造函数.第四个构造函数调用了最常用的超累的构造函数,然后调用
+	setEditable(false)以确保用户不会在输出流向其输入内容的时候改变文本.
 	</pre>
+	<h4>示例2-4 JStreamedTextArea控件</h4>
+	<pre class="code">
+	package com.elharo.io.ui;
+	import javax.swing.*;
+	import java.io.*;
+	public class JStreamedTextArea extends JTextArea {
+		private OutputStream theOutput = new TextAreaOutputStream( );
+		public JStreamedTextArea( ) {
+			this("", 0, 0);
+		}
+		public JStreamedTextArea(String text) {
+			this(text, 0, 0);
+		}
+		public JStreamedTextArea(int rows, int columns) {
+			this("", rows, columns);
+		}
+		public JStreamedTextArea(String text, int rows, int columns) {
+			super(text, rows, columns);
+			setEditable(false);
+		}
+		public OutputStream getOutputStream( ) {
+			return theOutput;
+		}
+		private class TextAreaOutputStream extends OutputStream {
+			private boolean closed = false;
+			public void write(int b) throws IOException {
+			checkOpen( );
+			// recall that the int should really just be a byte
+			b &= 0x000000FF;
+			// must convert byte to a char in order to append it
+			char c = (char) b;
+			append(String.valueOf(c));
+			}
+			private void checkOpen( ) throws IOException {
+				if (closed) throw new IOException("Write to closed stream");
+			}	
+			public void write(byte[] data, int offset, int length)
+			throws IOException {
+				checkOpen( );
+				append(new String(data, offset, length));
+			}
+			public void close( ) {
+				this.closed = true;
+			}
+		}
+	}
+
+	</pre>
+	
   </body>
 </html>
