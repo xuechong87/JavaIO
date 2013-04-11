@@ -1,6 +1,7 @@
 package chapter2;
 
 import javax.swing.*;
+
 import java.io.*;
 
 @SuppressWarnings("serial")
@@ -54,5 +55,12 @@ public class Test2_6 extends JTextArea {
 		public void close() {
 			this.closed = true;
 		}
+	}
+	
+	public static void main(String[] args) {
+		JTextArea text = new Test2_6();
+		java.applet.Applet applet = new JApplet();
+		applet.add(text);
+		applet.start();
 	}
 }

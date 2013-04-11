@@ -69,6 +69,25 @@
 	}
 
 	</pre>
+	<pre>
+		内部类TextAreaOutputStream非常简单.它继承了OutputStream所以必须实现抽象方法write().
+	它也重写了以数组为参数的主要方法write()以提供更高效的实现.最后它重写了close()方法以确保
+	在流关闭后不会在有写入.
 	
+		想使用这个类只需要再增加一个容器实例比如一个applet或一个window,就像添加一个普通的
+	文本域一样.然后调用它的getOutputStream()方法获得文本域输出流的引用,再用普通的write()方
+	法向文本域内写内容.一般来讲,这些步骤会在不同的时间不同的地方和不同的方法中发生.
+	
+		图2-1中展示了一个使用JStreamedTextArea来显式从http://www.oreilly.com/下载的数据的
+	程序.图中的程序会在第五章中完成:
+	</pre>
+	<center>
+		<h4>图2-1JStreamedTextArea控件</h4>
+		<img src="JStreamedTextArea.jpg"/>
+	</center>
+	<pre>
+		在之后的章节中我会依据现在还没讨论的技术重新审视并改进这个类.尤其是我将会更注意字
+	符集和编码的问题.
+	</pre>
   </body>
 </html>
