@@ -57,10 +57,4 @@ public class Test2_6 extends JTextArea {
 		}
 	}
 	
-	public static void main(String[] args) {
-		JTextArea text = new Test2_6();
-		java.applet.Applet applet = new JApplet();
-		applet.add(text);
-		applet.start();
-	}
 }
