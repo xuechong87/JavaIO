@@ -4,7 +4,6 @@ import org.junit.Test;
 
 public class Test2_3 {
 	
-	
 	@Test
 	public void closeSystemOut(){
 		System.out.close();

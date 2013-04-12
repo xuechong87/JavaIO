@@ -7,8 +7,6 @@ import org.junit.Test;
 
 public class Test2_5 {
 	
-	
-	
 	@Test
 	public void testNullInput() throws IOException{
 		OutputStream out = new OutputStream() {
