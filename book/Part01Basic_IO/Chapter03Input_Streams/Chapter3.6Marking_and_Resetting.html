@@ -1,0 +1,24 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter3.6 Marking and Resetting</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+  </head>
+  
+  <body>
+	<h2>Chapter 3.6 标记和重置(Marking and Resetting)</h2>
+	<pre>
+		有时经常会需要读取一小段字节然后将其备份并重新读取.例如,在Java编译器中,在你读了足够多的字
+	符之前你无法确定你读到的是否是标识符'&lt;','&lt;&lt;',或者'&lt;&lt;='.能备份并重读这些你读到的
+	标识符是很重要的.
+	
+		有些输入流(并非所有)可以让你在流中标记一个特定的位置并返回这个位置.java.io.InputStream中有
+	三个方法用来处理标记和重置:
+		public void    mark(int readLimit)
+		public void    reset( ) throws IOException
+		public boolean markSupported( )
+		
+		
+	</pre>
+  </body>
+</html>
