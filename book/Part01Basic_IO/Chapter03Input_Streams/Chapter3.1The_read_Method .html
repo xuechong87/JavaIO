@@ -1,0 +1,80 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter3.1 The read( ) Method</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body onload="prettyPrint()">
+	<h2>Chapter 3.1 read方法(The read() Method)</h2>
+	<pre>
+		InputStream的基本方法是read().这个方法读取一个无符号byte数据并返回这个无符号bye的
+	int值.这个数字在0-255之间.
+		public abstract int read() throws IOException
+
+		read()方法是抽象的;所以InputStream也是抽象的.你永远不可能直接实例化一个InputStream;
+	你实际操作的总是它的子类的对象.
+	
+		以下的代码从输入流System.in中读取10字节的数据,并把他们存在一个int数组中:
+		int[] data = new int[10];
+		for (int i = 0; i &lt; data.length; i++) {
+		  data[i] = System.in.read( );
+		}
+		
+		尽管read()方法读取的是byte数据但是却返回int型,如果你想将这些存为原始的byte类型,你
+	可以把int转换成byte,例如:
+		byte[] b = new byte[10];
+		for (int i = 0; i &lt; b.length; i++) {
+			b[i] = (byte) System.in.read( );
+		}
+
+		当然这个过程产生的是有符号的byte而不是read()方法返回的无符号byte(也就是说,一个取值
+	范围在-128到127之间的byte而不是0-255).一旦你搞清楚这些,那么在你的代码里无论处理的是有符号
+	还是无符号byte你都不会有问题.有符号的byte可以用如下的代码转换成0-255的int型:
+		int i = (b >= 0) ? b : 256 + b;
+
+		当你调用read()方法,你必须捕获它抛出的IOException,或让你的方法声明抛出异常.但是如果
+	read()方法读到了流的结尾,也就是返回-1的时候,并不会发生IOException.以下的代码演示了如何捕
+	获IOException并测试是否到了流的结尾:
+	
+		try {
+			InputStream in = new FileInputStream("file.txt");
+			int[] data = new int[10];
+			for (int i = 0; i &lt; data.length; i++) {
+				int datum = in.read( );
+				if (datum  == -1) break;
+				data[i] = datum;
+			}
+		}
+		catch (IOException ex) {
+			System.err.println(ex.getMessage( ));
+		}
+
+		一般来讲read()方法会为了读取数据而一直等待下去.很多输入流没有超时(很少的网络流是
+	例外)输入可能会很慢,所以如果你的程序还在做其他重要的东西,试着把I/O放在单独的线程内.
+	
+		示例3-1是一个从System.in中读取数据并将其中读到的每个字节的整数值通过
+	System.out.println()打印在控制台中的小程序:
+	</pre>
+	<h4>示例3-1 The StreamPrinter class</h4>
+	<pre class="prettyprint">
+	import java.io.*;
+	public class StreamPrinter {
+		public static void main(String[] args) {
+			try {
+				while (true) {
+					int datum = System.in.read( );
+					if (datum  == -1) break;
+					System.out.println(datum);
+				}
+			}
+			catch (IOException ex) {
+				System.err.println("Couldn't read from System.in!");
+			}
+		}
+	}
+	</pre>
+  </body>
+</html>

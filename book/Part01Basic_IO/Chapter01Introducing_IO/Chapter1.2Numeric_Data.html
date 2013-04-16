@@ -1,0 +1,153 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter1.2Numeric_Data.html</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body>
+    <h2>Chapter 1.2 数字数据(Numeric Data)</h2>
+	<pre>
+		输入流读字节类型,输出流写字节类型.读取器(reader)读字符(character),写入器
+	(writer)写字符类型.所以,为了理解输入和输出,你首先需要深刻理解Java是如何处理字节,
+	整数(integer),字符(characters)和其他基本类型的数据的,并且了解他们为什么与何时能
+	互相转换.很多情况下,Java对这些行为的表现并不明显.
+	</pre>
+	<h3>Chapter 1.2.1 整数数据(Integer Data)</h3>
+	<pre>
+		Java中基本的整数类型为int,4字节(byte),Big-endian①,二进制补码整数.一个int型数据
+	范围为-2,147,483,648 至 2,147,483,647的整数.当你在Java源代码中敲下一段文字,比如7,
+	-8345, 或者 3000000000,编译器会把这段文字作为int型处理.但是3000000000 或者类似大小
+	的数字,超出了一个int型数据能承载的范围,编译器会发出"Numeric overflow"的错误信息.
+	
+		long类型为8字节(byte),Big-endian,二进制补码整数.其范围为
+	-9,223,372,036,854,775,808 至 9,223,372,036,854,775,807.long 类型的文字表示为整数
+	后面加上一个大写或者小写的"L".(大写的L是首选,因为在大多数字体里面,小写的L很容易和
+	数字1搞混.)例如:7L, -8345L, 和 3000000000L 都是64位(64-bit)的long类型的文字表达 .
+	
+		Java中还有两种可用的整数类型,short和byte.short是2字节(byte),Big-endian,二进
+	制补码整数.取值范围为-32,768 至 32,767.short很少在Java中使用,主要是为了兼容C而
+	存在.
+	
+		但是,byte类型在Java用的使用非常频繁.尤其是在I/O中的使用.byte类型是8-bit,
+	Big-endian,二进制补码整数.取值范围由-128至127.特别需要注意的是,byte和Java其他数字
+	类型一样,是有符号的(signed).byte的最大值是127.128,129或者255这些不能作为byte类型.
+	
+		Java没有short或byte的标识符.当你写下 42或者24000的时候,编译器总是认为这是一个
+	int类型,而永远不会把它当做byte或者short,即使是在一个给byte或short的赋值语句右面使
+	用,例如:
+		byte b = 42;
+		short s = 42000;
+	
+		尽管在这些代码中,编译器进行了特殊的类型转换,有效的把int型转换成了更小的类型.
+	这是因为int数据的值在编译期已经确定,这是被编译器允许的.但是当你想把一个声明为int的
+	变量转换为short或者byte类型时,你至少需要一个显式转换.比如,看以下的代码:
+		int i = 42;
+		byte b = i;
+		
+		在编译以上代码的时候会报出这样的错误:
+		Error:    Incompatible type for declaration.
+		Explicit cast needed to convert int to short.
+		ByteTest.java  line 6
+		
+		在这种情况下,即使理论上编译器能确定这种声明不会丢失数据信息,也一样会报错,
+	你必须使用如下的显式转换:
+		int i = 42;
+		byte b = (byte) i;
+		
+		即使是两个byte变量相加返回的整数结果,也不可以直接声明为byte变量来接收.比如
+	如下的代码在编译时会报出同样的错误:
+		byte b1 = 22;
+		byte b2 = 23;
+		byte b3 = b1 + b2;
+	
+		因为这些原因,直接操作byte类型并不是很方便.在流操作类的很多方法文档注释中声称
+	是在读或写byte数据.但是,他们实际上接收和返回的数据是int型无符号byte(取值为0-255).
+	这和Java任何一种基本数据类型都不匹配.这些int数据在内部被转换为byte型.
+	
+		例如,按照Java类库中的文档说明.java.io.InputStream中的read()方法返回"the next
+	byte of data, or -1 if the end of the stream is reached"(数据的下一个字节或者当流
+	结束时返回-1).回头想想,这很奇怪.用-1怎么能区分是流数据的一部分还是流的结尾?而实际
+	上,read()方法并没有返回byte类型;他的方法签名,返回的是int:
+		public abstract int read( ) throws IOException
+		
+		这个int并不是Java中取值在-128至127的byte类型,而是更一般的无符号byte,取值范围
+	为0至255.因此,-1可以简单有效的区分从流中读取的数据.
+		
+		java.io.OutputStream中的write()方法有同样的问题.它返回void但是用int作为输入
+	参数:
+		public abstract void write(int b) throws IOException
+	
+		这个int本意是一个从0-255的无符号byte值.但是没什么能阻止一个粗心的程序员把一个
+	超出范围的int值传入到方法中.在这种时候,int值的后8bit会被写入,前面24bit则会被忽略,
+	其取值为如下代码:
+		b = b & 0x000000FF;
+	
+		尽管这种行为在Java语言规范(Java Language Specification)中描述过,但是write()
+	方法是抽象的,实际的实现取决于具体的子类,粗心的程序员可能会做不合约定的事.
+	
+		另一方面,真正Java的byte类型在读取或入byte数组的方法中出现.例如:
+	请考虑java.io.InputStream中的两个read()方法:
+		public int read(byte[] data) throws IOException
+		public int read(byte[] data, int offset, int length) throws IOException
+
+		对于一个数字来讲,8bit的byte和32bit的int可能区别不大,但是当你想要读取几千甚至
+	几百万的数字的时候,这种区别就非常明显了.实际上,一个byte类型数据始终需要在JVM中占
+	用4个字节的空间.但是一个byte数组却只占用他们实际需要的空间.虚拟机在草走byte数组时
+	有特殊的指令,但是对于单个byte数据却没有.单个byte数据只是被简单的升级成int来操作.
+	
+		尽管数据被存储在有符号的(-128至127)Java byte数组中,但是有一个简单的一对一规则
+	来使Java的有符号byte型与I/O中通常使用的无符号byte进行对应.这个规则的公式如下:
+	
+		int unsignedByte = signedByte >= 0 ? signedByte : 256 + signedByte;
+	</pre>
+	
+	<h3>Chapter 1.2.2 自动类型转换和强制转换(Conversions and Casts)</h3>
+	<pre>
+		因为byte的取值范围如此之小,他们经常被转换为int以完成计算和方法的调用.很多
+	时候他们需要被转换回byte,基本上都是通过强制转换.因此,有必要深入理解这些转换到底是
+	如何进行的.
+	
+		如何将int转换成byte是个问题,从任何取值更宽的整数类型转换为取值更窄的类型一般
+	是通过截取高位的数据来进行的.也就是说,如果更宽的类型所存储的值能用窄类型来表示,
+	那么转换后的值是不会改变的.int型的127转换为byte型后值仍然为127.
+		
+		另一方面,如果int的值超出了byte的范围,就会发生奇怪的事情.int型的128转换为byte
+	型并不是最接近的值127.而是-128.这就是二级制补码算法的神奇之处.128用16进制数表达为
+	0x00000080.当int被强制转换为byte时,前面的6个0都被删掉了,剩下0x80.在二进制里可以表
+	示为10000000.如果这是个无符号整数,10000000的值应该是128,一切都会很正常.但是这并不
+	是一个无符号整数.所以开头的一位(bit)是一个符号位,他并不表示2^7而是一个负号.而负数
+	的绝对值则是取补(就是把所有1换成0,反之亦然)再加1.10000000取补得到的是01111111.再
+	加1就是01111111 + 1 = 10000000 = 128 (十进制).所以,byte型的0x80实际表示的值为-128.
+	而int型的128转换为byte后值为-127,int型130转换为byte得-126,int型131转换为byte得-125
+	等等...继续计算下去,直到int255转换为byte得值为-1.
+	
+		注:在这本书里,与在Java源码中一样,所有以0x开头的数字均是16进制.
+		
+		到了int256的时候,int的低位全都是0.或者说256 的16进制为 0x00000100.所以,将其
+	转换为byte则会得到0,继续计算的结果会不断循环.这个算法可以用如下的公式来阐明:
+		int byteValue;
+		int temp = intValue % 256;
+		if ( intValue < 0) {
+		  byteValue =  temp < -128 ? 256 + temp : temp;
+		}
+		else {
+		  byteValue =  temp > 127 ? temp - 256 : temp;
+		}
+	</pre>
+	
+	<hr/>
+	<pre>
+	译注:
+	①:Big-endian按照最高位字节(包含最高位，即MSB，的字节)至最低位字节(包含最低位,
+	即LSB,的字节)的顺序,存放在连续的地址中.
+	例如：
+		双字节数0x1234以big-endian的方式存在起始地址0x00000000中
+		数据&lt;--地址| 0x12 |&lt;-- 0x00000000
+		| 0x34 |&lt;-- 0x00000001
+		
+	</pre>
+  </body>
+</html>

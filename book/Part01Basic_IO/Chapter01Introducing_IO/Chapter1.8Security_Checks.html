@@ -1,0 +1,48 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter 1.8 Security Checks on I/O</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body onload="prettyPrint()">
+    <h2>Chapter 1.8 I/O中的安全检查(Security Checks on I/O)</h2>
+	<pre>
+		对于从网络上下载如applet一类可执行内容的担忧之一,是因为一个恶意的applet可能会删除
+	你硬盘上的资料,或者读取你的信用卡信息.直到使用Java前,没有人对此做过任何改善.这就是Java的
+	applet会在安全管理器下运行的原因,它会检查一个applet的每个操作以防止潜在的恶意行为.
+	
+		对于I/O操作安全管理器更是特别小心.大多数情况下,安全检查会检查这些相关问题:
+	</pre>
+	
+	<ul>
+		<li>程序是否能读取特定的文件?</li>
+		<li>程序是否能写特定的文件?</li>
+		<li>程序是否能删除特定的文件?</li>
+		<li>程序是否能删除特定的文件?</li>
+		<li>程序是否能确定特定文件的存在?</li>
+		<li>程序是否能与特定的服务器进行网络连接?</li>
+		<li>程序是否能从特定的服务器接受连接?</li>
+	</ul>
+	<pre>
+		当这个程序是在说applet的时候,简单的答案就是"不,它不能".更具体的说,可能会有很少的意
+	外情况.applet可以与它们出生的网络主机进行网络连接;applets可以读取很少的一些关于Java运行
+	环境的特殊文件;而受信任的applet有时可能不会受到这些约束.而在大多数实际使用为目的的applet
+	中,答案总是否.
+		
+		由于存在这些安全问题,如果你想在applet中使用本书中的代码段和示例时,你需要特别小心.
+	本书中的示例可以在普通应用程序中正常运行,但是在applet中,它可能会因一个SecurityException
+	而失败.并不是总能说请到底是哪个方法或类会造成这个问题.比如BufferedOutputStream的write()
+	方法,当最终的目标是一个byte数组的时候是彻底安全的.但是,同样的write()方法在写入一个文件的
+	时候却会抛出异常.尝试与一个网络服务器建立连接可能会成功也可能会失败,这取决于你要连接的服
+	务器是否是applet所来自的服务器.
+		
+		所以,这本书专注于应用程序.在applet中只有很少的I/O操作不会与安全管理器发生冲突.这个
+	问题并不总是很明显,即使异常发生了,也不是所有web浏览器都能正常的报告安全异常.如果你写的
+	applet程序作为单独应用时运行很正常而在浏览器中却不行,那么问题很可能就是与浏览器的安全管理
+	器冲突了.
+	</pre>
+  </body>
+</html>

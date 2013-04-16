@@ -1,0 +1,75 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter 1.6 The Ubiquitous IOException</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body onload="prettyPrint()">
+    <h2>Chapter 1.6 无处不在的IO异常(The Ubiquitous IOException)</h2>
+	<pre>
+		在电脑运行时,输入与输出是很不靠谱的.他们是完全超出程序员能控制的问题.读取文
+	件时,硬盘可能会有坏扇.建筑工人的铲车可能会搞断你的物理广域网线.用户进行了不可预期
+	的输入取消.电话修理人员在给其他人修理电话的时候关掉了你的调制解调器.(最后一项在作
+	者正在写这一章的时候发生了.我的猫一直在掉线,然后没有拨号音.我不得不去我的地下室找
+	Verizon的修理工,并向他们解释他们搞错了线路)
+	
+		因为这些和更多的潜在问题的存在,几乎每个输入输出的方法都会声明为抛出一个
+	IOException.IOException是一个被检查的(checked )异常,所以你必须在你的方法中加上
+	throw或者在try/catch块中捕获.唯一真正出现的例外是PrintStream和PrintWriter类.因为
+	在调用System.out.println()方法时加上try/catch会很不方便,所以Sun公司决定让
+	PrintStream(和之后的PrintWriter)捕获并吞掉所有print()或println()方法中出现的异常.
+	如果你想在调用print()或println()方法时检查内部的异常,可以调用checkError()①方法:
+		public boolean checkError()
+	
+		IOException仅仅在在java.io包内就有15个子类,方法通常会抛出一个更详细的
+	IOException的子类;例如,在意外文件结尾时抛出EOFException,或者在你尝试读取一个未知字
+	符集的文本时抛出UnsupportedEncodingException.但是,这些方法通常只声明他们会抛出一个
+	IOException.
+	
+		java.io.IOException类没有定义特别的公共方法和公共成员.它只提供了大多数异常
+	类中都有的两个构造函数:
+		public IOException( )
+		public IOException(String message)
+	
+		第一个构造函数会创建一个无消息内容的IOException.第二个则提供了更多关于错误
+	的信息.当然IOException也有其他所有Exception类都拥有的方法比如toString()和
+	printStackTrace().
+	
+		*Java6增加了IOError类:"当出现了严重的I/O错误的时候抛出".Xueming Shen②从后门
+	偷偷放了这个类进去,只是为了避免在新的Console类中抛出他们本该抛出的IOException.我不
+	知道这个累赘是否会在Java6的最终版本中存在.但是当我编写这本书的时候,我正努力游说他
+	们把这个类删掉,或者至少换成一个运行时异常(runtime exception),而不是一个错误(error)
+		
+	</pre>
+	<hr/>
+	<pre>
+		译者注:
+		①实际的使用是这样的:
+			System.out.println("test");
+			boolean flag = System.out.checkError();
+		checkError()的注释中对返回值的说明为:
+		true if and only if this stream has encountered an IOException 
+		other than InterruptedIOException, or the setError method has been invoked
+		
+		
+		②Xueming Shen :java.io.IOError的作者.在查看Java6的源码时,我们可以看到
+	这个类的doc上是这样写的:
+	<pre class="prettyprint">
+		/**
+		 * Thrown when a serious I/O error has occurred. 
+		 *
+		 * @author  Xueming Shen
+		 * @version %I% %G%
+		 * @since   1.6
+		 */
+		public class IOError extends Error{
+			......
+		}
+		</pre>
+		虽然原作者非常讨厌这个玩意,但实际上在Java 7中这个类仍然存在.
+	</pre>
+  </body>
+</html>

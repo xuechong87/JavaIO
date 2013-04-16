@@ -1,0 +1,58 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter3.5 Closing Input Streams</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body onload="prettyPrint()">
+	<h2>Chapter 3.5 关闭输入流(Closing Input Streams)</h2>
+	<pre>
+		与输出流一样,当你想停止操作输入流并释放如文件句柄和网络端口一类的本地资源时,你应当
+	关闭输入流.想要关闭输入流,调用close()方法:
+		public void close( ) throws IOException
+
+		一旦你关闭了输入流,你就不应该再从里面读取东西了.大多数这种操作会抛出一个IOException.
+		
+		并不是所有的流都需要关闭.例如System.in就不需要关闭.但是与文件和网络连接相关的流总是
+	需要在你操作完成后进行关闭.和输出流一样,最好在finally语句块中操作以保证即使在流打开时发生
+	了异常也可以关闭.例如:
+		// Initialize this to null to keep the compiler from complaining
+		// about uninitialized variables
+		InputStream in = null;
+		try {
+			URL u = new URL("http://www.msf.org/");
+			in = u.openStream( );
+			// Read from the stream...
+		}
+		catch (IOException ex) {
+			System.err.println(ex);
+		}
+		finally {
+			if (in != null) {
+				try {
+					in.close( );
+				}
+				catch (IOException ex) {
+					System.err.println(ex);
+				}
+			}
+		}
+
+		如果你能让任何抛出的异常继续向上层传递,这段代码会变得更简短:
+		// Initialize this to null to keep the compiler from complaining
+		// about uninitialized variables
+		InputStream in = null;
+		try {
+			URL u = new URL("http://www.msf.org/");
+			in = u.openStream( );
+			// Read from the stream...
+		}
+		finally {
+			if (in != null) in.close( );
+		}
+	</pre>
+  </body>
+</html>

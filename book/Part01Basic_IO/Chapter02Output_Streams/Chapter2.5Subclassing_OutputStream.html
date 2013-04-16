@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter2.5 Subclassing OutputStream</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body onload="prettyPrint()">
+	<h2>Chapter 2.5 创建OutputStream的子类(Subclassing OutputStream)</h2>
+	<pre>
+		OutputStream是一个描述了所有OutputStream对象可用行为的抽象类.具体的子类知道如何将
+	字节写入到指定的目的地.比如FileOutputStream使用native代码将数据写入到文件中.而
+	ByteArrayOutputStream 类则使用了纯Java代码用变长数组写它的输出.
+	
+		回顾一下,在OutputStream中有三个重载的write()一个抽象的,两个具体的:
+		public abstract void write(int b) throws IOException
+		public void write(byte[] data) throws IOException
+		public void write(byte[] data, int offset, int length) throws IOException
+
+		子类必须实现抽象的write(int b)方法.通常他们也会重写第三个方法
+	write(byte[], data int offset, int length)以提升性能.通过重复调用write(int b)实现的三个
+	参数的write()方法可以这样写:
+		public void write(byte[] data, int offset, int length) throws IOException {
+			for (int i = offset; i &lt; offset+length; i++) write(data[i]);
+		}
+
+		很多子类可以提供对此方法更加有效的实现.单参数的write(byte[] data)方法只是调用了
+	write(data, 0, data.length);如果三个参数的方法被重写了,这个方法的性能也会变好.当然,也有
+	很少的子类把这个方法也重写了.
+	
+		示例2-3NullOutputStream 程序模仿了Unix系统中的/dev/null.被写入到3NullOutputStream
+	中的数据会丢失.
+	</pre>
+	<h4>示例2-3 NullOutputStream类</h4>
+	<pre class="prettyprint">
+	
+	package com.elharo.io;
+	import java.io.*;
+	
+	public class NullOutputStream extends OutputStream {
+		private boolean closed = false;
+		public void write(int b) throws IOException {
+			if (closed) throw new IOException("Write to closed stream");
+		}
+		public void write(byte[] data, int offset, int length)
+		throws IOException {
+			if (data == null) throw new NullPointerException("data is null");
+			if (closed) throw new IOException("Write to closed stream");
+		}
+		public void close( ) {
+			closed = true;
+		}
+	}
+	</pre>
+	<pre>
+		从父类继承来的无任何操作的flush()方法对于这个不需要清空的流来讲足够了.但是需要注意
+	到这个流需要在写东西前检查此流是否已经被关闭了,并检查被传入的数组是否是null.很多子类也会
+	需要做同样的检查.
+	
+		在你的样板程序中把System.out和System.err重定向到一个NullOutputStream后,你就可以
+	禁用任何可能从质量检验中漏掉的调试信息:
+	
+		OutputStream out = new NullOutputStream( );
+		PrintStream ps = new PrintStream(out);
+		System.setOut(ps);
+		System.setErr(ps);
+	</pre>
+  </body>
+</html>

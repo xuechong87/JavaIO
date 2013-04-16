@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter2.2 Writing Arrays of Bytes</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+<body onload="prettyPrint()">
+	<h2>Chapter 2.2 写字节数组(Writing Arrays of Bytes)</h2>
+	<pre>
+		通常来讲,一次性写一大块数据要比一个字节一个字节来的快.有两个重载的方法可以做这件事:
+		public void write(byte[] data) throws IOException
+		public void write(byte[] data, int offset, int length) throws IOException
+
+		第一个变种写了整个数组的所有字节.第二个只写了data中从offset开始以length为长度的字节.
+	例如,以下代码将一个字符串中的字节组成数组并输入到System.out中:
+		String s = "How are streams treating you?";
+		byte[] data = s.getBytes( );
+		System.out.write(data);
+
+		反过来,当你尝试一次写入太多数据的时候,可能会有性能问题.确切的转折点取决于数据最终
+	的目的地.文件一般最好用磁盘块大小的较小整数倍来写,如1024,2048或4096.网络连接通常需要更小
+	的缓存,一般是128或256字节.实际上最佳的缓冲区大小取决于太多系统具体的细节,没有什么能得到保
+	证,而我一般用128字节作为网络连接缓冲区,而用1024作为文件缓冲区.
+	
+		示例2-2构建了一个ASCII字符的字节数组,并只用一次write()方法将其输入到控制台中:
+	</pre>	
+	<h4>示例2-2 The AsciiArray program</h4>
+	<pre class="prettyprint">
+	import java.io.*;
+	public class AsciiArray {
+		public static void main(String[] args) {
+			byte[] b = new byte[(127-31)*2];
+			int index = 0;
+			for (int i = 32; i &lt; 127; i++) {
+			  b[index++] = (byte) i;
+			  // Break line after every eight characters.
+			  if (i % 8 == 7) b[index++] = (byte) '\n';
+			  else b[index++] = (byte) '\t';
+			}
+			b[index++] = (byte) '\n';
+			try {
+			  System.out.write(b);
+			}
+			catch (IOException ex) {
+			  System.err.println(ex);
+			}
+		}
+	}
+	</pre>
+	<pre>
+		输出的内容与示例2-1中一样.由于控制台自身的问题,这个程序可能没有比2-1快多少,但是当你
+	向一个文件中写入文件时这肯定会快很多.调用一次write()方法写字节数组要比写每个字节的时候调
+	用一次write()方法性能高出一百倍甚至更多.
+	
+	</pre>
+	
+  </body>
+</html>

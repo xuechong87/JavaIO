@@ -1,0 +1,72 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter3.7 Subclassing InputStream</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+	
+  </head>
+  
+  <body onload="prettyPrint()" >
+	<h2>Chapter 3.7 创建InputStream的子类(Subclassing InputStream)</h2>
+	<pre>
+		InputStream的直接子类大多提供了抽象的read()方法的实现.他们也可能同时重写了一些非抽象的方法.
+	例如默认的markSupported()方法返回false,mark()方法什么也没做,而reset()方法抛出一个IOException.
+	任何允许标记和重置的类必须重写这三个方法.子类可能也会重写available()方法返回0以外的东西.更有甚者
+	他们可能会重写skip()方法和其他两个read()方法以提供更高效的实现.
+	
+		示例3-2是一个名为RandomInputStream的"读取"随机字节数据的类.它提供了一个可用的无限的测试数据
+	源.一个java.util.Random对象来提供数据
+	</pre>
+	<h4>示例3-2 The RandomInputStream class</h4>
+	<pre class="prettyprint">
+	
+		package com.elharo.io;
+		import java.util.*;
+		import java.io.*;
+		
+		public class RandomInputStream extends InputStream {
+			private Random generator = new Random( );
+			private boolean closed = false;
+			public int read( ) throws IOException {
+				checkOpen( );
+				int result = generator.nextInt( ) % 256;
+				if (result &lt; 0) result = -result;
+				return result;
+			}
+			public int read(byte[] data, int offset, int length) throws IOException {
+				checkOpen( );
+				byte[] temp = new byte[length];
+				generator.nextBytes(temp);
+				System.arraycopy(temp, 0, data, offset, length);
+				return length;
+			}
+			public int read(byte[] data) throws IOException {
+				checkOpen( );
+				generator.nextBytes(data);
+				return data.length;
+			}
+			public long skip(long bytesToSkip) throws IOException {
+				checkOpen( );
+				// It's all random so skipping has no effect.
+				return bytesToSkip;
+			}
+			public void close( ) {
+				this.closed = true;
+			}
+			private void checkOpen( ) throws IOException {
+				if (closed) throw new IOException("Input stream closed");
+			}
+			public int available( ) {
+				// Limited only by available memory and the size of an array.
+				return Integer.MAX_VALUE;
+			}
+		}
+	</pre>
+	<pre>
+		无参数的read()方法返回一个无符号byte(0-255)的int型值.其他两个read()方法会用随机的byte值填满
+	一个数组.他们返回读取的字节数(在现在这个情况返回的实际是创建的数据)
+	</pre>
+  </body>
+</html>

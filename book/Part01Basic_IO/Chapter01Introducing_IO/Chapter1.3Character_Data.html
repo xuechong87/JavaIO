@@ -1,0 +1,124 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter1.3Character_Data.html</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body>
+    <h2>Chapter 1.3 字符数据(Character Data)</h2>
+	<pre>
+		数字类型只是典型的Java程序需要读写的数据类型之一.很多程序还需要处理文字,
+	而文字由字符组成.由于计算机真正理解的只有数字,所以字符被按照给每个字符一个对应
+	数字的方式编码.比如在ASCII编码中, 字符 A 被映射为65;B则是66;C是67等等.不同的编
+	码会按照不同的脚本进行,或者用同样的脚本以不同的方式编码.
+		
+		Java可以理解数十种包含不同语言的字符集,从ASCII到Shift Japanese Input System
+	(SJIS)或是Unicode.在Java内部则使用Unicode字符集.Unicode 是 1-byte的Latin-1字符集
+	的超超集,而Latin-1则是8-bit的,他是ASCII(7-bit)字符集的超集.
+	</pre>
+	<h3>Chapter 1.3.1 ASCII</h3>
+	<pre>
+		ASCII,美国信息交换标准代码American Standard Code for Information Interchange
+	是一个7-bit的字符集.它定义了2^7或者说128个不同的字符,用0-127之间的整数代表.这些字
+	符足以处理大多数的美国英语.这是各种计算机上常用格式的最低标准.如果你从一个流中读取
+	了一个0-127的byte数据,并将起强转为char,所得到的结果就是对应的ASCII字符.
+		ASCII 字符031和字符127是非打印控制字符.字符32至47是空格和各种符号.字符48-57是
+	数字0至9.字符58-64号是另一组标点符号.字符65-90是大写字母A-Z,字符91-96是另一些符号,
+	字符97-122是小写字母a-z.最后,字符123-126是所剩不多的标点符号.
+		这些会在字符集表的
+		<a href="../../appendix/character_set.html" target="blank">A-1</a>表中列出
+	</pre>
+	<h3>Chapter 1.3.2 Latin-1</h3>
+	<pre>
+		ISO 8859-1, Latin-1是一个8bit字符集,是ASCII严谨的超集.它定义了2^8也就是
+	256个字符,取值范围从0到255.其中前128个字符,这些最高位数为0的数字直接与ASCII
+	字符集对应.比如65在ASCII中是A在Latin-1中也是A;66在ASCII中是B在Latin-1中也是B
+	等等.ASCII与Latin-1的区别在于从128至255的字符(这些字符的最高位是1).ASCII并没
+	有定义这些字符.Latin-1用他们对应各种其他字母,比如ü这种在非英语中使用的字符被
+	写在Roman脚本中,更多的特殊符号如©,以及更多的控制字符.以上的这些,非ASCII的
+	Latin-1字符在<a href="../../appendix/character_set.html" target="blank">A-2</a>表中列出.
+	如果你从一个流中读取无符号byte值并强转成char型,得到的结果就会对应Latin-1字符.
+	</pre>
+	<h3>Chapter 1.3.3 Unicode</h3>
+	<pre>
+		Latin-1足以满足大多数西欧语言(当然希腊语明显是个例外),但是它没有足够的位
+	置来放下西里尔文,希腊文,阿拉伯文,希伯来文,梵文字符更不要说像中文和日文这类象形
+	语言.仅仅中文一项就有超过8万个字符.为了处理这些脚本和许多其他语言,Unicode诞生
+	了.Unicode有超过一百万的空间来存储字符.只有大约10万字符在实践中使用,剩下的位置
+	被留作未来的扩展.Unicode可以处理世界上大部分活跃的语言,和一些已经"死掉"的语言.
+	
+		Unicode前256个字符与Latin-1相同.比如65在ASCII中是A在Unicode中也是A,
+	66在ASCII中是B在Unicode中也是B,等等.
+	
+		Unicode只是一个字符集.它并不是一个字符编码格式.也就是说,尽管Unicode给字母
+	A一个65号,但它并不会决定数字65是应该用一个字节(byte)两个字节还是四个字节去写,
+	也不会决定是用big-endian还是little-endian.当然,也有一定的编码标准来把Unicode
+	编码成byte,最普遍的是UTF-8,UTF-16和UTF-32.
+		
+		UTF-32是最简单的编码,它只是简单的用一个4byte的int型去表示每个字符.
+		
+		UTF-16用2byte的无符号short来表示大多数字符.但是,一些不常用的汉字,音乐和
+	数学符号和一些失传的文字如Linear B都用4byte来表示.JVM内部使用的是UTF-16.实际上
+	一个Java的char并不是一个真正的Unicode字符.而是一个UTF-16的码位,有些时候需要两
+	个Java char才能组成一个Unicode字符.
+		
+		最后UTF-8是一种相对高效的编码(尤其当你的大部分文字都是ASCII的时候),它使
+	用1byte来表示ASCII字符,用2byte表示其他字幕,用3-4byte表示亚洲语言中的字符.Java
+	的.class文件内部用UTF-8来存储字符串文字.
+	</pre>
+	<h3>Chapter 1.3.4 其他编码</h3>
+	<pre>
+		ASCII,Latin-1,和Unicode并不是唯一普遍使用的字符集,尽管他们是被Java最直接
+	处理的编码.还有很多不同的字符集,有的是用不同的脚本编码,有的则是使用同样的脚本用其
+	他方式编码.例如,IBM大型机一直使用一种名EBCDIC的为非ASCII字符集.EBCDIC有着和ASCII
+	几乎一样的字符,但是给了他们不同的数字对应.Macintoshes电脑通常使用8bit编码被称为
+	MacRoman的编码,它在前128字符与ASCII相同,后128个字符基本与Latin-1相同但是有不同的
+	数字位置.DOS(包括windows的DOS shell)使用Cp850编码,包含了框绘制字符(box drawing 
+	characters )比如下列字符:
+	<img src="image/char1.jpg"/><img src="image/char2.jpg"/><br/>
+		Big-5 和 SJIS是中文与日文的编码,这届脚本包含了非常多的字符.
+	
+		每种编码的具体细节是非常复杂的,应该丢给专家去处理.幸运的是,Java类库包含了一个
+	由这种专家编写的reader和writer类集.reader与writer可以在不用其他帮助的情况下将byte
+	数据转换为特定编码的Java char.因此,在书写文字的时候你应该使用writer而不是一个输出
+	流,这些会在第20章讨论
+	
+	</pre>
+	<h3>Chapter 1.3.5 字符类型(The char Data Type)</h3>
+	<pre>
+		Java中的文本主要是由基本类型char,char数组,和内部由char数组实现的String来组成.
+	就像你必须先理解byte才能高清楚输入与输出是如何工作的一样,你必须先了解char才能理解
+	reader和writer的工作原理.
+	
+		在Java中,char是个2byte,无符号整数,Java中唯一的无符号类型.所以,char的可能取值
+	为0-65535(0xFFFF).每一个char代表一个Unicode中的字符.char可以用在其取值范围内的int
+	文字表达进行赋值:
+		char copyright = 169;
+	
+		char也可以用单引号进行赋值:
+		char copyright = '©';
+
+		在sun的javac编译器中可以把多种不同的编码翻译成Unicode,通过使用-encoding指令
+	以指定输出文件的编码:例如,如果你知道一个源文件是用ISO 8859-1写的,那你可以这样编译:
+		% javac -encoding 8859_1 CharTest.java
+
+		可使用的编码会在表A-4中列出(译注:我没看到A4表...= =!)
+
+		除了Unicode自己,大多数Java可以理解的字符集没有和Unicode所有的字符对应.为了给
+	那些在这些字符集中不存在的字符编码,你可以使用Unicode转义字符.Unicod转义字符由一个
+	反斜杠(\)和任意数量的u字符,后面跟上代表字符的4位16进制数字组成:
+		char copyright = '\u00A9';
+
+		Unicode转义不仅可以用在char的赋值上,也可以给字符串标识符,注释,甚至在关键字,
+	分隔符,运算符和数值文字中使用.编译器在这些源码中的转义符进行任何操作之前就将其转换
+	成Unicode字符.
+	
+		Unicode转义是大多数编辑器不能处理Unicode字符时代的遗留物.幸运的是,这在很多年
+	前就不再是问题了.当前,Java的源代码应该直接用Unicode编写(最好是用UTF-8格式编码)而
+	任何非ASCII字符都可以直接输入.在2006年的时候,Unicode转义只会让你混淆代码.
+	</pre>
+  </body>
+</html>

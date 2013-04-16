@@ -1,0 +1,69 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter 1.4 Readers and Writers</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body>
+    <h2>Chapter 1.4 Readers and Writers</h2>
+	<pre>
+		流主要用于可以作为单纯字节来读取的数据,byte数据和数字数据被编码成各种二进制
+	数字.流非常不适合读写文本,不管是像"Hello World"这种ASCII文本,还是"3.141592"这种数
+	字文本.在这些时候,你应该使用reader和writer
+		
+		输入和输出流是以byte为基础的.reader和writer则是以字符为基础,而字符是变长的,
+	其长度取决于字符集.例如,ASCII和Latin-1使用1-byte字符.UTF-32使用4-byte字符.而UTF-8
+	使用变长字符(在1-4byte之间).由于字符最终还是由byte组成的,reader还是从流中获取输入.
+	但是他们会在传递数据之前将这些byte根据指定的编码格式转换为char.同样的,writer会将
+	char按编码格式其转换为byte,然后写入一些底层的流中.
+		
+		java.io.Reader和java.io.Writer类是读写字符数据类的抽象超类.这些子类值得注意
+	的是处理不同字符集的转换.Java的核心API中有八个writer和reader类,都在java.io包内:
+		
+		BufferedReader
+		BufferedWriter
+		CharArrayReader
+		CharArrayWriter
+		FileReader
+		FileWriter
+		FilterReader
+		FilterWriter
+		InputStreamReader
+		LineNumberReader
+		OutputStreamWriter
+		PipedReader
+		PipedWriter
+		PrintWriter
+		PushbackReader
+		StringReader
+		StringWriter
+		
+		大多数情况下,这些类拥有和他们对应的流类非常相似的方法.通常唯一的区别就是流
+	类byte类型的参数变成了char类型已对应reader和writer的方法.例如java.io.OutputStream
+	类声明了三个write()方法:
+		public abstract void write(int i) throws IOException
+		public void write(byte[] data) throws IOException
+		public void write(byte[] data, int offset, int length) throws IOException
+
+		而java.io.Writer类也定义了三个write()方法:
+		public void write(int i) throws IOException
+		public void write(char[] data) throws IOException
+		public abstract void write(char[] data, int offset, int length) throws IOException
+
+		就像你所看到的,后面两个方法的参数byte数组变为了char数组.还有一个不太明显的
+	差异没有表现在方法签名中.当int被传入OutputStream的write()方法中,取了对256的模,而被
+	传如Writer的writer()方法中的int则被取了65,536的模.这是由于char和byte不同的取值范围
+	造成的.
+		
+		java.io.Writer还有另外两个write()方法,可以接收String数据:
+		public void write(String s) throws IOException
+		public void write(String s, int offset, int length) throws IOException
+
+		由于流并不知道如何解析以char为基础的数据,所以java.io.OutputStream中没有
+	对应的方法.
+	</pre>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter3.6 Marking and Resetting</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body onload="prettyPrint()">
+	<h2>Chapter 3.6 标记和重置(Marking and Resetting)</h2>
+	<pre>
+		有时经常会需要读取一小段字节然后将其备份并重新读取.例如,在Java编译器中,在你读了足够多的字
+	符之前你无法确定你读到的是否是标识符'&lt;','&lt;&lt;',或者'&lt;&lt;='.能备份并重读这些你读到的
+	标识符是很重要的.
+	
+		有些输入流(并非所有)可以让你在流中标记一个特定的位置并返回这个位置.java.io.InputStream中有
+	三个方法用来处理标记和重置:
+		public void    mark(int readLimit)
+		public void    reset( ) throws IOException
+		public boolean markSupported( )
+		
+		如果这个流支持标记markSupported()方法会返回true否则返回false.如果标记不被支持,则reset()方法
+	会抛出一个IOException,而mark()方法什么也不会做.假设流支持标记,mark()方法会在流的当前位置放一个
+	书签.如果你没有读超过readLimit数量的字节,就可以在之后通过reset()方法重新回到这个位置.在一个流中
+	只能同时存在一个标记.如果做了第二个标记则第一个会被擦掉.
+	
+		在java.io包中只有两个输入流类总是支持标记的,他们是BufferedInputStream(System.in是它的一个
+	实例)和ByteArrayInputStream.
+	
+		但是其他的输入流比如DataInputStream也有可能支持标记,前提是他们先被连接到一个带缓存的输入流上
+	</pre>
+	<pre class="annotation" >
+	
+		*这可真是个滑稽的设计.在父类中放一个并不适用于所有子类的方法几乎永远都是个坏主意.对这个
+	问题更适合的解决应该是定义一个Resettable接口并把这三个方法放进去,子类可以选择是否实现这个接口.
+	那样你就可以用简单的一行instanceof Resettable来验证子类是否支持标记和重置了.对此我能提供的唯一
+	解释就是:这个设计是十几年前Java1.0版本时期的,而那时并不是所有写Java的人都能完全理解面向对象的设
+	计.
+	</pre>
+  </body>
+</html>

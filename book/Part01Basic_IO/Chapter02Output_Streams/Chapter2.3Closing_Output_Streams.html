@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter2.3 Closing Output Streams</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+  </head>
+  
+  <body>
+	<h2>Chapter 2.3 关闭输出流(Closing Output Streams)</h2>
+	<pre>
+		当你用完了一个流后,你应该把它关掉.这可以让操作系统释放所有与流关联的资源.确切的说,
+	这些资源取决于你的平台和流的类型.然而,很多系统的资源是有限的.例如在一些个人电脑的操作系统
+	中,不可能同时打开几百个文件.多用户操作系统有更大的上限,但仍然是有限的.
+	
+		关闭一个流,需要调用close方法():
+		public void close( ) throws IOException
+
+		例如,再次假设out对象是一个OutputStream,使用out.close()来关闭这个流并释放所有相关
+	资源,如与该流关联的文件句柄或网络端口.
+		
+		一旦你关闭了一个输出流,你可能就在也不能在这个流上面写东西了.尝试继续写会引发一个
+	IOException,但是也有很少的几个类不会这样.
+	</pre>
+	<pre class="annotation">
+		再一次重申,System.out是一个特例,因为作为一个PrintStream类的对象,所有抛出的异常都
+	被吞掉了.当你关掉了System.out之后你就不能继续向其写入东西.但是这样做不会引发任何异常;而
+	你的输出也不会显示在控制台中
+	</pre>
+	<pre>
+		不是所有的流都需要关闭,比如字节数组的输出流就不需要关闭.然而对于与文件或网络连接
+	关联的流来说,在你操作完成后总是应该将其关闭的.例如如果你打开了一个文件写入东西并忘了关闭
+	,那么当其他对此文件的读写操作可能会因此而阻塞.通常关闭文件应该这样做:
+		try {
+			OutputStream out = new FileOutputStream("numbers.dat");
+			// Write to the stream...
+			out.close( );
+		}
+		catch (IOException ex) {
+			System.err.println(ex);
+		}
+
+		但是这段代码有个潜在的问题.如果在写文件时抛出了一个IOException,那么流是不会被关闭的.
+	更靠谱的是在finally语句块中关闭流,这样无论是否出现异常流都可以被关闭.你需要在try语句外定
+	义OutputStream的变量以完成这个操作,例如:
+		// Initialize this to null to keep the compiler from complaining
+		// about uninitialized variables
+		OutputStream out = null;
+		try {
+			out = new FileOutputStream("numbers.dat");
+			// Write to the stream...
+		}
+		catch (IOException ex) {
+			System.err.println(ex);
+		}
+		finally {
+			if (out != null) {
+				try {
+					out.close( );
+				}
+				catch (IOException ex) {
+					System.err.println(ex);
+				}
+			}
+		}
+		
+		变量的作用域和嵌套的try-catch-finally语句块可能让代码变得丑陋了,但是这确实增加了安
+	全性.如果你抛出了IOException而不是捕获他们的话,代码会变得整洁些;也就是说让使用这些代码的
+	方法声明抛出IOException.这种情况下调用close方法会是这样的:
+
+		// Initialize this to null to keep the compiler from complaining
+		// about uninitialized variables
+		OutputStream out == null;
+		try {
+			out = new FileOutputStream("numbers.dat");
+			// Write to the stream...
+		}
+		finally {
+			if (out != null) out.close( );
+		}
+		
+	</pre>
+	<h3>Chapter 2.3.1 Closeable接口(The Closeable Interface)</h3>
+	<pre>
+		Java 5增加了OutputStream所实现的Closeable接口:
+		
+		package java.io;
+		public interface Closeable {
+			void close( ) throws IOException;
+		}
+
+		InputStream, Channel, Formatter和很多其他可以被关闭的东西都实现了这个接口.就我个人
+	来讲,我从来没想出这个额外接口的应用场景,不过如果因为什么原因你需要写一个方法只接受一个可
+	关闭的参数的时候,或者其他类似的情况这个接口就有用了.
+
+	</pre>
+  </body>
+</html>

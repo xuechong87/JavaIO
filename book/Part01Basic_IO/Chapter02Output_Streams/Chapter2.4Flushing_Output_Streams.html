@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter2.4 Flushing Output Streams</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body onload="prettyPrint()">
+	<h2>Chapter 2.4 清空输出流(Flushing Output Streams)</h2>
+	<pre>
+		很多输出流缓存了要写的内容以提升性能.并不是挨个字节的发送到目的地,而是将数个到几千
+	的字节在内从中缓存.当缓冲区填满,所有的数据一次发送.flush()方法无视缓冲区是否填满而强制数
+	据为可写状态.
+		public void flush( ) throws IOException
+
+		这与任何操作系统和硬件的缓冲区不同.在调用flush()方法后这些缓冲区不会被清空(当你使用
+	FileDescriptor类的sync()方法时,可能会清空这些缓存.我们会在17章讨论这个类)
+	
+		如果你只是断时间的使用一个流,你并不需要显式的去清空它.当流被关闭时它会自动被清空.
+	这会在你调用close()方法或者程序退出时发生.显式清空一个输出流的唯一目的是为了确保在你用完
+	这个流的时候数据本全部发送了.例如一个向网络中定时发送数据的程序应该在每次数据写入到输出
+	流之后清空缓存.
+		
+		在你调试一个崩溃的程序时,清空一般是很重要的.当流的缓冲区被填满时,他们会自动清空,
+	在程序正常退出的时候,所有流都应该被清空.然而,如果程序是异常终止的,缓冲区则有可能没有清空.
+	这时,除非在每次写操作时都显式调用了flush()方法,你就不能保证输出的数据能显示出程序的崩溃点
+	实际上,程序可能在崩溃点之后再运行一段时间.
+	
+		System.out, System.err和一些(并不是所有)其他的打印流会在每次调用println()方法后或
+	在每个写入字符串中出现的('\n')换行符出现后清空.你可以在PrintStream 的构造函数中开启或关闭
+	自动清空.
+	</pre>
+	
+	<h3>Chapter 2.4.1 Flushable接口(The Flushable Interface)</h3>
+	<pre>
+		Java5增加了OutputStream所实现的Flushable接口:
+		package java.io;
+		public interface Flushable {
+		  void flush( ) throws IOException;
+		}
+		
+		Formatter和很多其他可被清空的东西也实现了这个接口.我也从来没想出这个额外接口的应
+	用场景,不过如果因为什么原因你需要写一个方法只接受一个可清空的参数的时候,或者其他类似的
+	情况下这个接口就有用了.
+
+	</pre>
+  </body>
+</html>

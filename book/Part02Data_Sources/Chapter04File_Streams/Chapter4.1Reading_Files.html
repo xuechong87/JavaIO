@@ -1,0 +1,50 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter4.1 Reading_Files</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body onload="prettyPrint()" >
+	<h1>Chapter 4.1 读取文件(Reading Files)</h1>
+	<pre>
+		java.io.FileInputStream是java.io.InputStream的具体子类.它提供了一个与特定文件连接的输入流.
+	FileInputStream有所有输入流的普通方法,比如read(),available,skip()和close(),其作用也与在其他输入
+	流中的一样.FileInputStream有三个构造函数,区别只在于如何指定要读的文件:
+		
+		public FileInputStream(String fileName) throws IOException
+		public FileInputStream(File file) throws FileNotFoundException
+		public FileInputStream(FileDescriptor fdObj)
+
+		第一个构造函数使用一个包含文件名的字符串,第二个使用一个java.io.File对象,第三个使用一个
+	java.io.FileDescriptor 对象.
+	
+		要读一个文件,只要把文件名传到FileInputStream()的构造函数中.通常用read()方法.例如,如下的
+	代码读取了"README.TXT"文件,然后打印到System.out:
+	
+		try {
+			FileInputStream fis = new FileInputStream("README.TXT");
+			for (int n = fis.read(); n != -1; n = fis.read( )) {
+				System.out.write(n);
+			}	
+		}
+		catch (IOException ex) {
+			System.err.println(ex);
+		}
+		System.out.println( );
+
+		Java会从当前工作目录(current working directory)寻找这个文件.一般来讲,这个目录就是你输入
+	java program_name运行程序时所在的那个目录.你可以打开其他目录的文件,但是要传入一个绝对路径或者
+	文件对于当前工作目录的相对路径.例如,想要读/etc/hosts,不管你在那个目录你都可以这样写:
+	
+		FileInputStream fis = new FileInputStream("/etc/hosts");
+
+		文件名是取决于平台的,所以应该尽量避免硬编码的文件名.这个例子建立在类Unix系统的路径名基础上.
+	不能保证它能在其他平台如Windows和Max OS9上运行,尽管它也有可能正常工作.用文件名来创建一个
+	FileInputStream违反了Sun的"100%纯Java"规则.有些运行时环境比如苹果的Macintosh Runtime for Java
+	包含了额外的代码以把Unix风格的文件名转换成本地风格.
+	</pre>
+  </body>
+</html>

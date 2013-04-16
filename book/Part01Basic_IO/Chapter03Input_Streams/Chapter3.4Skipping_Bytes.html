@@ -1,0 +1,35 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter3.4 Skipping Bytes</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body onload="prettyPrint()">
+	<h2>Chapter 3.4 跳过字节(Skipping Bytes)</h2>
+	<pre>
+		skip()方法跳过输入中一定数量的字节:
+		public long skip(long bytesToSkip) throws IOException
+		
+		skip()方法的参数是要跳过的字节数.返回的数据是实际跳过的字节数,可能会比bytesToSkip
+	少些.如果遇到了流的结尾,则会返回-1.参数和返回值都是long类型,这可以让skip()方法处理非常长
+	的输入流.跳过通常要比读数据和丢弃你不要的数据来的快.例如当一个输入流指向一个文件,可以跳过
+	一些字节只请求需要修改的位置,而读取整个文件涉及从磁盘到内存的字节复制.例如,想要跳过输入
+	流 in 里面的下80个字节:
+		try {
+			long bytesSkipped = 0;
+			long bytesToSkip = 80;
+			while (bytesSkipped &lt; bytesToSkip) {
+				long n = in.skip(bytesToSkip - bytesSkipped);
+				if (n == -1) break;
+				bytesSkipped += n;
+		  }
+		}
+		catch (IOException ex) {
+			System.err.println(ex);
+		}
+	</pre>
+  </body>
+</html>

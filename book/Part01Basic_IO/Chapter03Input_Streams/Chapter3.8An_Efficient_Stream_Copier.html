@@ -1,0 +1,56 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter3.8 An Efficient Stream Copier</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body onload="prettyPrint()" >
+	<h2>Chapter 3.8 高效的流拷贝器(An Efficient Stream Copier)</h2>
+	<pre>
+		示例3-3是一个对输入流和输出流都有用的示例,我会呈现一个StreamCopier类,以尽可能快的速度将数据
+	从一个流拷贝到另一个流中(在之后的章节中我会复用这个类).这个方法从输入流中读取数据并写入到输出流
+	中,直到输入流的尽头.通过使用一个1K的缓冲区使读取更加高效.main()方法提供了一个简单的测试,从
+	System.in中读取并拷贝到System.out中:
+	</pre>
+	<h4>示例3-3 The StreamCopier class</h4>
+	<pre class="prettyprint">
+	
+		package com.elharo.io;
+		import java.io.*;
+		public class StreamCopier {
+			public static void main(String[] args) {
+				try {
+					copy(System.in, System.out);
+				}
+				catch (IOException ex) {
+					System.err.println(ex);
+				}
+			}
+			public static void copy(InputStream in, OutputStream out)
+				throws IOException {
+				byte[] buffer = new byte[1024];
+				while (true) {
+					int bytesRead = in.read(buffer);
+					if (bytesRead == -1) break;
+					out.write(buffer, 0, bytesRead);
+				}
+			}
+		}
+	</pre>
+	<pre>
+		下面是个简单的运行测试:
+		D:\JAVA\ioexamples\03> java com.elharo.io.StreamCopier
+		this is a test
+		this is a test
+		0987654321
+		0987654321
+		^Z
+		
+		控制台(DOS 提示符)的输入直到每一行的结束才会提供给StreamCopier.因为我是在windows中运行此
+	程序,所以流结束的字符是Ctrl-Z,在Unix上这个字符应该是Ctrl-D.
+	</pre>
+  </body>
+</html>

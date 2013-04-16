@@ -1,0 +1,55 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter3.2 Reading Chunks of Data from a Stream</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body onload="prettyPrint()">
+	<h2>Chapter 3.2 从流中读取一块数据(Reading Chunks of Data from a Stream)</h2>
+	<pre>
+		输入和输出经常成为一个程序的性能瓶颈.从磁盘中读取或写入可能会比对内存读写慢上几百倍.
+	网络连接和用户输入要更慢.虽然随着时间推移硬盘的速度和容量都在增长,但是他们从未赶上CPU进化
+	的步伐.所以,实际应用的程序中尽量减少读写的次数是很有必要的.
+	
+		所有的输出流都重载了可以将一块连续数据读取到byte数组中的read()方法.第一个变种尝试读
+	取数组中填充的全部数据,第二个变种从数组中读取offset开始length长的数据.这两个方法都不能确
+	保读取了你想要的数据数量.两个方法都会返回实际读取的字节的整数,或者在流的结尾返回-1.
+		public int read(byte[] data) throws IOException
+		public int read(byte[] data, int offset, int length) throws IOException
+
+		这些方法在java.io.InputStream中的默认实现只是循环调用了足够多次的基本read()方法以
+	满足请求的整个数组或截取的数组.所以读取十个字节的数据需要读取一个字节数据所需时间的十倍.
+	但是大多数InputStream 的子类用更搞笑的实现重写了这些方法,也有些可能是用native代码,把数据
+	源作为一整块来读取.
+	
+		例如,想要从System.in中读取10个字节,你可以用如下的代码:
+		
+		try {
+			byte[] b = new byte[10];
+			System.in.read(b);
+		}
+		catch (IOException ex) {
+			System.err.println("Couldn't read from System.in!");
+		}
+
+		read方法并不总能成功的读取你想要的所有字节.相反的,没有什么能阻止你去读超出一个数组
+	存储范围的数据.如果你这样做了,read()方法会抛出一个ArrayIndexOutOfBoundsException.例如,如
+	下代码会在数组填满或者流结束前一直循环下去:
+		try {
+		byte[] b = new byte[100];
+		int offset = 0;
+		while (offset &lt; b.length) {
+			int bytesRead = System.in.read(b, offset, b.length - offset);
+			if (bytesRead == -1) break; // end of stream
+			offset += bytesRead;
+		}
+		}
+		catch (IOException ex) {
+			System.err.println("Couldn't read from System.in!");
+		}
+	</pre>
+  </body>
+</html>
