@@ -3,9 +3,11 @@
   <head>
     <title>Chapter2.5 Subclassing OutputStream</title>
 	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
   </head>
   
-  <body>
+  <body onload="prettyPrint()">
 	<h2>Chapter 2.5 创建OutputStream的子类(Subclassing OutputStream)</h2>
 	<pre>
 		OutputStream是一个描述了所有OutputStream对象可用行为的抽象类.具体的子类知道如何将
@@ -32,9 +34,11 @@
 	中的数据会丢失.
 	</pre>
 	<h4>示例2-3 NullOutputStream类</h4>
-	<pre class="code">
+	<pre class="prettyprint">
+	
 	package com.elharo.io;
 	import java.io.*;
+	
 	public class NullOutputStream extends OutputStream {
 		private boolean closed = false;
 		public void write(int b) throws IOException {

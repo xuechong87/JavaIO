@@ -2,9 +2,12 @@
 <html>
   <head>
     <title>Chapter 1.8 Security Checks on I/O</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
   </head>
   
-  <body>
+  <body onload="prettyPrint()">
     <h2>Chapter 1.8 I/O中的安全检查(Security Checks on I/O)</h2>
 	<pre>
 		对于从网络上下载如applet一类可执行内容的担忧之一,是因为一个恶意的applet可能会删除
@@ -13,6 +16,7 @@
 	
 		对于I/O操作安全管理器更是特别小心.大多数情况下,安全检查会检查这些相关问题:
 	</pre>
+	
 	<ul>
 		<li>程序是否能读取特定的文件?</li>
 		<li>程序是否能写特定的文件?</li>

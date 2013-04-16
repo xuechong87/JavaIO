@@ -3,9 +3,11 @@
   <head>
     <title>Chapter3.6 Marking and Resetting</title>
 	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
   </head>
   
-  <body>
+  <body onload="prettyPrint()">
 	<h2>Chapter 3.6 标记和重置(Marking and Resetting)</h2>
 	<pre>
 		有时经常会需要读取一小段字节然后将其备份并重新读取.例如,在Java编译器中,在你读了足够多的字
@@ -29,6 +31,7 @@
 		但是其他的输入流比如DataInputStream也有可能支持标记,前提是他们先被连接到一个带缓存的输入流上
 	</pre>
 	<pre class="annotation" >
+	
 		*这可真是个滑稽的设计.在父类中放一个并不适用于所有子类的方法几乎永远都是个坏主意.对这个
 	问题更适合的解决应该是定义一个Resettable接口并把这三个方法放进去,子类可以选择是否实现这个接口.
 	那样你就可以用简单的一行instanceof Resettable来验证子类是否支持标记和重置了.对此我能提供的唯一

@@ -3,9 +3,11 @@
   <head>
     <title>Chapter2.6 A Graphical User Interface for Output Streams</title>
 	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
   </head>
   
-  <body>
+  <body onload="prettyPrint()">
 	<h2>Chapter 2.6 OutputStream的图形界面(A Graphical User Interface for Output Streams)
 	</h2>
 	<pre>
@@ -22,10 +24,12 @@
 	setEditable(false)以确保用户不会在输出流向其输入内容的时候改变文本.
 	</pre>
 	<h4>示例2-4 JStreamedTextArea控件</h4>
-	<pre class="code">
+	<pre class="prettyprint">
+	
 	package com.elharo.io.ui;
 	import javax.swing.*;
 	import java.io.*;
+	
 	public class JStreamedTextArea extends JTextArea {
 		private OutputStream theOutput = new TextAreaOutputStream( );
 		public JStreamedTextArea( ) {

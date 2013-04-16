@@ -3,9 +3,11 @@
   <head>
     <title>Chapter3.1 The read( ) Method</title>
 	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
   </head>
   
-  <body>
+  <body onload="prettyPrint()">
 	<h2>Chapter 3.1 read方法(The read() Method)</h2>
 	<pre>
 		InputStream的基本方法是read().这个方法读取一个无符号byte数据并返回这个无符号bye的
@@ -57,7 +59,7 @@
 	System.out.println()打印在控制台中的小程序:
 	</pre>
 	<h4>示例3-1 The StreamPrinter class</h4>
-	<pre class="code">
+	<pre class="prettyprint">
 	import java.io.*;
 	public class StreamPrinter {
 		public static void main(String[] args) {

@@ -3,9 +3,11 @@
   <head>
     <title>Chapter 1.7 The Console</title>
 	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
   </head>
   
-  <body>
+  <body onload="prettyPrint()">
     <h2>Chapter 1.7 控制台(The Console: System.out, System.in, and System.err)</h2>
 	<pre>
 		控制台是System.out和System.err的默认输出位置,也是System.in的默认输入位置.
@@ -115,12 +117,11 @@
 	抱怨感到疲倦了.在大多数脚本语言中,这只需要一行代码,不过与Java中传统方式相比这得到了一些
 	改善.
 	</pre>
-	<pre style="border:1px solid black;">
+	<pre class="annotation">
 	
 		*与其他语言相比,在Java中读取控制台输入要简单的多,因为在2006年除了大学计算机课程外,
 	没人会需要这么做.真正的应用程序使用GUI或者网络作为用户界面,而不是控制台,而Java移植专注于
 	解决真正的问题,而不是课本上的小示例.
-	
 	</pre>
 	<pre>
 		Java6增加了新的java.lang.Console类,提供了一些便利的输入和输出方法.这个类是单例类.
@@ -191,7 +192,7 @@
 	个学生会出的典型的bug.找到并改正这些错误是留给读者的家庭作业:
 	</pre>
 	<h4>示例1-1</h4>
-	<pre style="border:1px solid black;">
+	<pre class="prettyprint">
 		import java.io.*;
 		class Homework {
 			public static void main(String[] args) {

@@ -3,9 +3,11 @@
   <head>
     <title>Chapter2.1 Writing Bytes to Output Streams</title>
 	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
   </head>
   
-  <body>
+  <body onload="prettyPrint()">
 	<h2>Chapter 2.1 向输出流中写字节(Writing Bytes to Output Streams)</h2>
 	<pre>
 		OutputStream类中的基本方法是write():
@@ -22,7 +24,7 @@
 	
 	</pre>
 	<h4>示例2-1 AsciiChart</h4>
-	<pre class="code">
+	<pre class="prettyprint">
 		import java.io.*;
 		public class AsciiChart {
 			public static void main(String[] args) {

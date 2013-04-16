@@ -1,9 +1,16 @@
-﻿.code{
-color:red;	
-border:black 1px solid;
+﻿body{
+	line-height:22px;
+	background-color: #555;
+	color:white;
 }
-
+h1,h2,h3,h4{
+	color:#ffa0a0;
+}
+a{
+	color:#87ceeb;
+}
 .annotation{
-
 border:gray 1px solid;
+color:#87ceeb;
+background-color: #333;
 }

@@ -3,9 +3,11 @@
   <head>
     <title>Chapter2.2 Writing Arrays of Bytes</title>
 	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
   </head>
   
-  <body>
+<body onload="prettyPrint()">
 	<h2>Chapter 2.2 写字节数组(Writing Arrays of Bytes)</h2>
 	<pre>
 		通常来讲,一次性写一大块数据要比一个字节一个字节来的快.有两个重载的方法可以做这件事:
@@ -26,7 +28,7 @@
 		示例2-2构建了一个ASCII字符的字节数组,并只用一次write()方法将其输入到控制台中:
 	</pre>	
 	<h4>示例2-2 The AsciiArray program</h4>
-	<pre class="code">
+	<pre class="prettyprint">
 	import java.io.*;
 	public class AsciiArray {
 		public static void main(String[] args) {
