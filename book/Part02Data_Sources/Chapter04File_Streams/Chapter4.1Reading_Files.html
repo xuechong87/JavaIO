@@ -44,7 +44,25 @@
 		文件名是取决于平台的,所以应该尽量避免硬编码的文件名.这个例子建立在类Unix系统的路径名基础上.
 	不能保证它能在其他平台如Windows和Max OS9上运行,尽管它也有可能正常工作.用文件名来创建一个
 	FileInputStream违反了Sun的"100%纯Java"规则.有些运行时环境比如苹果的Macintosh Runtime for Java
-	包含了额外的代码以把Unix风格的文件名转换成本地风格.
+	包含了额外的代码以把Unix风格的文件名转换成本地风格.但是为了最大限度的跨平台思想,你应该用File对象
+	做参数.那些可以直接从文件名创建的情况会在17章中描述,他们由Swing JFileChooser一类的通过GUI获取,或
+	是分散在API和类库中的方法返回.大多是时候,使用File对象的代码能适应更多意料外的文件系统转换.一个重
+	要的技巧是创建多段路径然后追加新文件对象,如以下代码:
+	
+		File root = new File("/");
+		File dir = new File(root, "etc");
+		File child = new File(dir, "hosts");
+		FileInputStream fis = new FileInputStream(child);
+
+		但是这段代码在不以"/"为文件根目录的非Unix系统上不太可能正常运行.更好的办法是用
+	File.listRoots()方法:
+	
+		File[] roots = File.listRoots( )
+		File dir = new File(roots[0], "etc");
+		File child = new File(dir, "hosts");
+		FileInputStream fis = new FileInputStream(child);
+
+		但是,尽管这段代码有更好的平台独立性,但是它依然假设了一个特定的文件布局结构.
 	</pre>
   </body>
 </html>
