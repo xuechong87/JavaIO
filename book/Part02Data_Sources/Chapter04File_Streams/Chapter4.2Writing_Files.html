@@ -1,0 +1,118 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter4.2 Writing Files</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body onload="prettyPrint()" >
+	<h1>Chapter 4.2 写文件(Writing Files)</h1>
+	<pre>
+		java.io.FileOutputStream是java.io.OutputStream 的具体子类.它提供了一个与特定文件连接的输
+	出流FileOutputStream有所有输处流的普通方法,比如write(),flush()和close(),其作用也与在其他输出流
+	中的一样.
+	
+		FileOutputStream有三个主要的构造函数,区别只在于如何指定要写的文件:
+		
+		public FileOutputStream(String filename) throws IOException
+		public FileOutputStream(File file) throws IOException
+		public FileOutputStream(FileDescriptor fd)
+
+		第一个构造函数使用一个包含文件名的字符串,第二个使用一个java.io.File对象,第三个使用一个
+	java.io.FileDescriptor 对象.想要把数据写入到文件,只要把文件名传到FileOutputStream()的构造函数中.
+	通常用write()方法.如果文件不存在,所有三个构造函数都会创建它,如果文件已经存在,那么文件中的任何数
+	据都会被覆盖.
+	
+		第四个构造函数允许你决定在数据写入前,文件的内容是会被擦除(append == false),还是会从文件末尾
+	追加数据(append == true):
+	
+		public FileOutputStream(String name, boolean append) throws IOException
+	
+		由其他三个构造函数创建的输出流会覆盖文件;他们没有提供追加数据到文件的选项.
+		
+		Java会从当前工作目录(current working directory)寻找这个文件.你可以打开其他目录的文件,但是
+	要传入一个绝对路径或者文件对于当前工作目录的相对路径.
+		例如,想要追加数据到\Windows\java\javalog.txt文件,不管当前目录是哪个你都可以这样写:
+	
+		FileOutputStream fout = new FileOutputStream("/Windows/java/javalog.txt", true);
+
+		虽然Windows中用反斜杠('\')作为目录分隔符,Java仍然需要你用一个Unix中的正斜杠.硬编码的路径名
+	对于平台独立性是非常危险的.使用这个构造函数直接导致你的程序成为非纯Java程序.对于输入流,一个风险
+	更小的做法是每一步创建一个File对象:
+	
+		File[] roots = File.listRoots( )
+		File windows = new File(roots[0], "Windows");
+		File java = new File(windows, "java");
+		File javalog = new File(java, "javalog.txt");
+		FileInputStream fis = new FileInputStream(javalog);
+
+		不被信任的代码通常也不能写文件.如果一个applet尝试创建一个FileOutputStream,构造函数会抛出
+	一个SecurityException.
+	
+		FileOutputStream类有个一没有在java.io.OutputStream中声明的方法: getFD()
+		
+		public final FileDescriptor getFD( ) throws IOException
+
+		这个方法返回一个与此流相关的java.io.FileDescriptor对象.
+		
+		示例4-2从命令行中读取两个文件,然后将第一个文件拷贝到第二个中.StreamCopier类执行了实际的读写
+	操作:
+	</pre>
+	<h4>示例 4-2 The FileDumper program</h4>
+	<pre class="prettyprint">
+	
+		import java.io.*;
+		import com.elharo.io.*;
+		
+		public class FileCopier {
+			public static void main(String[] args) {
+				if (args.length != 2) {
+					System.err.println("Usage: java FileCopier infile outfile");
+				}
+				try {
+					copy(args[0], args[1]);
+				}
+				catch (IOException ex) {
+					System.err.println(ex);
+				}
+			}
+			public static void copy(String inFile, String outFile)
+			throws IOException {
+
+				FileInputStream  fin = null;
+				FileOutputStream fout = null;
+				try {
+					fin  = new FileInputStream(inFile);
+					fout = new FileOutputStream(outFile);
+					StreamCopier.copy(fin, fout);
+				}
+				finally {
+				  try {
+						if (fin != null) fin.close( );
+				  }
+				  catch (IOException ex) {
+				  }
+				  try {
+						if (fout != null) fout.close( );
+				  }
+				  catch (IOException ex) { }
+				}
+			}
+		}
+	</pre>
+	<pre>
+		由于我们不再向System.out写入也不再从System.in读取,所以确保流在操作后关闭是很重要的.这是
+	finally语句块派上用场的好机会,因为不管读写是失败还是成功我们都必须保证流的关闭.
+	
+		Java在关闭文件上比很多语言做的要好.只要虚拟机没有异常停止,文件会在程序退出时被关闭.但是如果
+	这个类在一个长时间运行的程序内,比如一个web服务器中出现,等到程序退出再关闭不是个好办法;其他的线程
+	和进程可能会需要访问这个文件.
+	
+		示例4-2有个一个bug:如果输入和输出的文件是同一个文件程序并不会表现正常.虽然在拷贝文件时它会
+	直接对比两个文件名,但这并不足够安全.一旦把别名,快捷键,符号链接,和其他因素都考虑在内,一个文件可能
+	会有多个名字.对此问题的完整解决要等到第17章,我会讨论规范的路径和临时文件.
+	</pre>
+  </body>
+</html>
