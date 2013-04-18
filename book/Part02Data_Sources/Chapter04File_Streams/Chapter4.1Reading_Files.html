@@ -62,7 +62,72 @@
 		File child = new File(dir, "hosts");
 		FileInputStream fis = new FileInputStream(child);
 
-		但是,尽管这段代码有更好的平台独立性,但是它依然假设了一个特定的文件布局结构.
+		但是,尽管这段代码有更好的平台独立性,但是它依然假设了一个特定的文件布局结构.这不仅能在平台
+	之间适用,也可以在PC之间适用,即使他们的操作系统是一样的.为了让程序更健壮,如果没有一个完整的文件,
+	你会希望至少通过调用适应本地系统的方法获取一个目录.这可能包括:
+	
+		*让用户从一个Swing JFileChooser中选择文件
+		
+		*让用户从一个AWT FileDialog中获取文件
+		
+		*从第三方库中 如MRJ Adapter 的 SpecialFolder获取一个已知路径,如相对路径文件夹地址或桌面路径.
+		
+		*用File.createTempFile()创建一个临时文件
+		
+		*用System.getProperty("user.home")获取用户的home目录
+		
+		*用System.getProperty("user.dir")获取当前的工作目录
+		
+		这个列表并不详尽,还有其他的方法.具体使用什么取决于实际的用例.关于这些方法的详尽说明会在之后
+	的章节中解决.
+	
+		如果在构造FileInputStream对象时你想要读的文件不存在,构造函数会抛出一个FileNotFoundException
+	(java.io.IOException的子类).如果因为一些其他原因文件无法读取,比如当前的进程没有读取这个文件的
+	权限,则会抛出其他类型的IOException.
+	
+		示例4-1从命令行读取一个文件名,然后将此文件拷贝到System.out中.示例3-3中的StreamCopier.copy()
+	方法做了实际的读写操作.需要注意的是这个方法不关心输入是否是从一个文件中来或者输出是到控制台中去.
+	它不会在意拷贝的输入和输出流的具体类型.它在其他流上也会正常运行,即使是那些在StreamCopier创建时
+	还不存在的流.
+	</pre>
+	<h4>示例 4-1 The FileDumper program</h4>
+	<pre class="prettyprint">
+	
+		import java.io.*;
+		import com.elharo.io.*;
+		
+		public class FileTyper {
+			public static void main(String[] args) throws IOException {
+				if (args.length != 1) {
+					System.err.println("Usage: java FileTyper filename");
+					return;
+				}
+				typeFile(args[0]);
+			}
+			public static void typeFile(String filename) throws IOException {
+				FileInputStream fin = new FileInputStream(filename);
+				try {
+					StreamCopier.copy(fin, System.out);
+				}
+				finally {
+					fin.close( );
+				}
+			}
+		}
+	</pre>
+	<pre>
+		不被信任的代码通常不能读写文件.如果一个applet尝试创建一个FileInputStream,构造函数会抛出
+	一个SecurityException.
+	
+		FileInputStream类有个一没有在InputStream中声明的方法: getFD()
+		
+		public final FileDescriptor getFD( ) throws IOException
+
+		这个方法返回一个与此流相关的java.io.FileDescriptor对象.FileDescriptor对象会在第17章中讨论.
+	现在你能用这个对象做的就是用它来创建一个新的流.
+	
+		对于同一个文件打开多个输入流是可行的,但是很少有需要这样做的情况.每个流包含一直指向文件当前
+	位置的独立指针.从文件中读取并不会改变文件.但是向文件写入就是另一回事儿了,你会在下一节看到这些.
 	</pre>
   </body>
 </html>
