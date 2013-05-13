@@ -12,61 +12,140 @@
 	<pre>
 		我经常发现打开任意的文件并用任意的方式解析是很有用的.大多数时候我会将其作为文本查看,但是
 	有时将其解析为16进制整数,IEEE754浮点数或者其他的也很有用.在这本书里,我会开发一个能让你打开任何
-	文件并用多种不同方式查看起
+	文件并用多种不同方式查看其内容的程序.在每一章我都会向这个程序中增加一些内容,直到它有完全的功能
+	由于这只是这个程序的开端,所以要尽量保证代码的一般性和适应性.
+	
+		示例4-3从命令行运行的main方法中读取一系列的文件名.每个文件名都被传递到一个可以打开该文件的方
+	发中.文件内的数据被读出兵打印到System.out中.实际由System.out打印出的数据取决于控制台.如果用户选择
+	了文本格式化(-a),数据会被假定为Latin-1,并被当做char打印.如果用户选择了十进制转储(-d),那么每个字节
+	会被当做0-255的无符号10进制整数输出,每行16个.例如:
+	
+		000 234 127 034 234 234 000 000 000 002 004 070 000 234 127 098
+
+		开头的0保证每行打印出的字节值都是恒定的长度.而以16进制转储要更简单,因为每个字节总是能直接
+	转换成两个16进制数.静态方法Integer.toHexString()把每个读出的字节转换为两位16进制数
 	</pre>
-	<h4>示例 4-2 The FileDumper program</h4>
+	<h4>示例 4-3 The FileDumper program</h4>
 	<pre class="prettyprint">
 	
 		import java.io.*;
 		import com.elharo.io.*;
-		
-		public class FileCopier {
+		public class FileDumper {
+			public static final int ASC = 0;
+			public static final int DEC = 1;
+			public static final int HEX = 2;
 			public static void main(String[] args) {
-				if (args.length != 2) {
-					System.err.println("Usage: java FileCopier infile outfile");
+				if (args.length < 1) {
+				  System.err.println("Usage: java FileDumper [-ahd] file1 file2...");
+				  return;
 				}
-				try {
-					copy(args[0], args[1]);
+				int firstArg = 0;
+				int mode = ASC;
+				if (args[0].startsWith("-")) {
+				  firstArg = 1;
+				  if (args[0].equals("-h")) mode = HEX;
+				  else if (args[0].equals("-d")) mode = DEC;
 				}
-				catch (IOException ex) {
-					System.err.println(ex);
+				for (int i = firstArg; i < args.length; i++) {
+					try {
+						if (mode == ASC) dumpAscii(args[i]);
+						else if (mode == HEX) dumpHex(args[i]);
+						else if (mode == DEC) dumpDecimal(args[i]);
+					}
+					catch (IOException ex) {
+					System.err.println("Error reading from " + args[i] + ": "
+						+ ex.getMessage( ));
+					}
+					if (i < args.length-1) {  // more files to dump
+						System.out.println("\r\n--------------------------------------\r\n");
+					}
 				}
 			}
-			public static void copy(String inFile, String outFile)
-			throws IOException {
-
-				FileInputStream  fin = null;
-				FileOutputStream fout = null;
+			public static void dumpAscii(String filename) throws IOException {
+				FileInputStream fin = null;
 				try {
-					fin  = new FileInputStream(inFile);
-					fout = new FileOutputStream(outFile);
-					StreamCopier.copy(fin, fout);
+					fin = new FileInputStream(filename);
+					StreamCopier.copy(fin, System.out);
 				}
 				finally {
-				  try {
-						if (fin != null) fin.close( );
-				  }
-				  catch (IOException ex) {
-				  }
-				  try {
-						if (fout != null) fout.close( );
-				  }
-				  catch (IOException ex) { }
+					if (fin != null) fin.close( );
+				}
+			}		
+			public static void dumpDecimal(String filename) throws IOException {
+				FileInputStream fin = null;
+				byte[] buffer = new byte[16];
+				boolean end = false;
+				try {
+					fin = new FileInputStream(filename);
+					while (!end) {
+						int bytesRead = 0;
+						while (bytesRead < buffer.length) {
+						  int r = fin.read(buffer, bytesRead, buffer.length - bytesRead);
+						  if (r == -1) {
+							end = true;
+							break;
+						  }
+						  bytesRead += r;
+						}
+						for (int i = 0; i < bytesRead; i++) {
+							int dec = buffer[i];
+							if (dec < 0) dec = 256 + dec;
+							if (dec < 10) System.out.print("00" + dec + " ");
+							else if (dec < 100) System.out.print("0" + dec + " ");
+							else System.out.print(dec + " ");
+						}
+						System.out.println( );
+					}
+				}
+				finally {
+					if (fin != null) fin.close( );
+				}
+			}
+			public static void dumpHex(String filename) throws IOException {
+				FileInputStream fin = null;
+				byte[] buffer = new byte[24];
+				boolean end = false;
+				try {
+					fin = new FileInputStream(filename);
+					while (!end) {
+						int bytesRead = 0;
+						while (bytesRead < buffer.length) {
+							int r = fin.read(buffer, bytesRead, buffer.length - bytesRead);
+							if (r == -1) {
+								end = true;
+								break;
+							}
+							bytesRead += r;
+						}
+						for (int i = 0; i < bytesRead; i++) {
+							int hex = buffer[i];
+							if (hex < 0) hex = 256 + hex;
+							if (hex >= 16) System.out.print(Integer.toHexString(hex) + " ");
+							else System.out.print("0" + Integer.toHexString(hex) + " ");
+						}
+						System.out.println( );
+					}
+				}
+				finally {
+					if (fin != null) fin.close( );
 				}
 			}
 		}
+
+
 	</pre>
 	<pre>
-		由于我们不再向System.out写入也不再从System.in读取,所以确保流在操作后关闭是很重要的.这是
-	finally语句块派上用场的好机会,因为不管读写是失败还是成功我们都必须保证流的关闭.
-	
-		Java在关闭文件上比很多语言做的要好.只要虚拟机没有异常停止,文件会在程序退出时被关闭.但是如果
-	这个类在一个长时间运行的程序内,比如一个web服务器中出现,等到程序退出再关闭不是个好办法;其他的线程
-	和进程可能会需要访问这个文件.
-	
-		示例4-2有个一个bug:如果输入和输出的文件是同一个文件程序并不会表现正常.虽然在拷贝文件时它会
-	直接对比两个文件名,但这并不足够安全.一旦把别名,快捷键,符号链接,和其他因素都考虑在内,一个文件可能
-	会有多个名字.对此问题的完整解决要等到第17章,我会讨论规范的路径和临时文件.
+		当这个文件转储程序转储它自己的.class文件为16进制的时候,它会有如下的输出:
+		
+		D:\JAVA\ioexamples\04> java FileDumper -h FileDumper.class
+		ca fe ba be 00 00 00 2e 00 78 0a 00 22 00 37 09 00 38 00 39 08 00 3a 0a
+		00 3b 00 3c 08 00 3d 0a 00 3e 00 3f 08 00 40 0a 00 3e 00 41 08 00 42 0a
+		00 21 00 43 0a 00 21 00 44 0a 00 21 00 45 09 00 38 00 46 08 00 47 07 00
+		48 0a 00 0f 00 49 0a 00 4a 00 4b 07 00 4c 0a 00 3b 00 4d 0a 00 0f 00 4e
+		...
+
+		在之后的章节,我会增加一个图形界面,和尽可能多的对文件数据的解析方式,包括浮点数,big-endian
+	和little-endian整数,以及多种文字编码 
 	</pre>
   </body>
 </html>
