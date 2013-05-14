@@ -10,12 +10,12 @@ a{
 	color:#87ceeb;
 }
 .annotation{
-border:gray 1px solid;
-color:#87ceeb;
-background-color: #333;
+	border:gray 1px solid;
+	color:#87ceeb;
+	background-color: #333;
 }
 .code{
-color:#87ceeb;
-line-height:26px;
-font-size:14px;
+	color:#87ceeb;
+	line-height:26px;
+	font-size:14px;
 }

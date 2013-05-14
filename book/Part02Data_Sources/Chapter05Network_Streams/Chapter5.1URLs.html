@@ -10,11 +10,79 @@
   <body onload="prettyPrint()" >
 	<h1>Chapter 5.1 URL</h1>
 	<pre >
-		
+		java.net.URL类代表统一资源定位符(Uniform Resource Locator)比如如下的地址:
+	http://www.cafeaulait.org/books/javaio2/.每个URL都确切的对应一个资源在互联网上的位置.URL
+	类有6个构造函数.每个都声明会抛出MalformedURLException,一个IOException的子类.
 	</pre>
-	<h4>示例 4-3 The FileDumper program</h4>
+	<pre class="code" >
+	public URL(String url) throws MalformedURLException
+	public URL(String protocol, String host, String file)
+		throws MalformedURLException
+	public URL(String protocol, String host, int port, String file)
+		throws MalformedURLException
+	public URL(String protocol, String host, int port, String file,
+		URLStreamHandler handler)  throws MalformedURLException
+	public URL(URL context, String url) throws MalformedURLException
+	public URL(URL context, String url, URLStreamHandler handler)
+		throws MalformedURLException
+	</pre>
+	<pre>
+		每个构造函数都会在其参数没有指定一个有效的URL的时候抛出MalformedURLException.通常
+	来说,这意味着一个特定的Java实现没有匹配一个正确的已安装的协议处理程序.那么通过一个绝对
+	URL比如http://www.poly.edu/schedule/fall2006/bgrad.html#cs,你可以用以下方式来创建一个
+	URL对象:
+	</pre>
+	<pre class="code">
+	URL u = null;
+	try {
+		u = new URL("http://www.poly.edu/schedule/fall2006/bgrad.html#cs");
+	}
+	catch (MalformedURLException ex) {
+		// this shouldn't happen for a syntactically correct http URL
+	}
+	</pre>
+	<pre>
+	你也可以通过把它的每个部分来创建一个URL对象
+	</pre>
+	<pre class="code">
+	URL u = new URL("http", "www.poly.edu", "/schedule/ fall2006/bgrad.html#cs");
+	</pre>
+	<pre>
+		你通常不需要制定一个URL的端口号.大多数协议有默认的端口.比如HTTP是80端口.但是
+	有时候端口号会改变,那么你可以使用这个构造函数:
+	</pre>
+	<pre class="code">
+	URL u = new URL("http", "www.poly.edu", 80, "/schedule/ fall2006/bgrad.html#cs ");
+	</pre>
+	
+	<h4>示例 5-1 The URLTyper program</h4>
 	<pre class="prettyprint">
 	
+	import java.net.*;
+	import java.io.*;
+	
+	public class URLTyper {
+		public static void main(String[] args) throws IOException {
+			if (args.length != 1) {
+				System.err.println("Usage: java URLTyper url");
+				return;
+			}
+			InputStream in = null;
+			try {
+				URL u = new URL(args[0]);
+				in = u.openStream( );
+				for (int c = in.read(); c != -1; c = in.read( )) {
+					System.out.write(c);
+				}
+			}
+			catch (MalformedURLException ex) {
+				System.err.println(args[0] + " is not a URL Java understands.");
+			}
+			finally {
+				if (in != null) in.close( );
+			}
+		}
+	}
 	</pre>
 	<pre>
 		
