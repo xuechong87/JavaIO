@@ -54,7 +54,30 @@
 	<pre class="code">
 	URL u = new URL("http", "www.poly.edu", 80, "/schedule/ fall2006/bgrad.html#cs ");
 	</pre>
+	<pre>
+		最后的,很多HTML文件包含了相对URL.最后两个构造函数可以创建指定URL的相对URL,在转换
+	HTML文件的时候非常有用.例如,如下的代码创建了一个指向08.html文件的URL,其余部分由传入的
+	ul参数来补充:
+	</pre>
+	<pre class="code">
+	URL u1 = new URL("http://www.cafeaualit.org/course/week12/07.html");
+	URL u2 = new URL(u1, "08.html");
+	</pre>
+	<pre>
+		一旦一个URL对象被创建,你可以通过两种方式查询它的数据.openStream()方法返回源文件的
+	原始字节流.getContent()方法返回一个代表数据的Java对象.当你调用getContent().Java会去找与
+	数据MIME类型匹配的内容处理器(handler).在这本书里我们只关心openStream()方法.
 	
+		openStream()方法建立了一个与URL中指定的服务器和端口匹配的socket连接.你可以从它返回
+	的输入流来读取URL的数据.在实际数据内容前的任何头信息都会在流打开前被剥离.你得到的只有
+	原始数据.
+	</pre>
+	<pre class="code">
+	public InputStream openStream( ) throws IOException
+	</pre>
+	<pre>
+		示例5-1向你展示了如何与一个从命令行输入的URL连接,下载它的数据并拷贝到System.out中
+	</pre>
 	<h4>示例 5-1 The URLTyper program</h4>
 	<pre class="prettyprint">
 	
@@ -85,7 +108,27 @@
 	}
 	</pre>
 	<pre>
-		
+		例如,这是你连接到http://www.oreilly.com/时看到的最开始几行
+	</pre>
+	<pre class="code">
+	$ java URLTyper http://www.oreilly.com/
+	&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"&gt;
+	&lt;html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US"&gt;
+	&lt;head&gt;
+	&lt;title&gt;oreilly.com -- Welcome to O'Reilly Media, Inc. -- computer books, softwar
+	e conferences, online publishing&lt;/title&gt;
+	&lt;meta name="keywords" content="O'Reilly, oreilly, computer books,
+	technical books, UNIX, unix, Perl, Java, Linux, Internet, Web, C, C++, Windows,
+	Windows NT, Security, Sys Admin, System Administration, Oracle, PL/SQL, online b
+	ooks, books online, computer book online, e-books, ebooks, Perl Conference, Open
+	 Source Conference, Java Conference, open source, free software, XML, Mac OS X,
+	.Net, dot net, C#, PHP, CGI, VB, VB Script, Java Script, javascript, Windows 200
+	0, XP, bioinformatics, web services, p2p" /&gt;
+	...
+	</pre>
+	<pre>
+		大多数网络连接,甚至局域网连接,比文件数据源要更慢和不稳定.跨越互联网的连接要更慢和
+	不稳定,通过调制解调器的连接也是一样.在这些情况下提高性能的方法之一就是使用缓存:
 	</pre>
   </body>
 </html>
