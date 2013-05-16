@@ -18,7 +18,27 @@
 		java.net.URLConnection是一个用于处理与不同服务器通讯的抽象类,例如FTP服务器或网络
 	服务器.基于特定协议的位于sun包下的URLConnection子类,用于处理不同类型的服务器.
 	</pre>
+	<h3>5.2.1 从URL Connection中读取数据</h3>
+	<pre>
+		使用URLConnection读取数据需要五个步骤:
+		<b>
+		1. URL对象的创建
+		2. URL对象的openConnection()方法调用创建URLConnection对象
+		3. 设置客户端要发送的服务器的连接参数和请求的属性.
+		4. 用connect()方法连接服务器,也许是用socke连接网络或者用文件输入流连接本地.从服务器
+		  返回的响应的头信息读取完毕.
+		5. URLConnection的数据可通过getInputStream()方法返回的输入流读取,并可以通过
+		   getContent()方法返回的内容处理器来读取.数据也可以通过getOutputStream()所返回的
+		   输出流发送到服务器
+		</b>
+		这个流程很大程度上是基于HTTP协议的.它可以满足基于HTTP/1.0的"请求,响应,关闭连接"
+	模式,但不能满足有更多交互的"请求,响应,请求,响应,请求,响应"模式.输出流发送到服务器.特
+	别是它并不是真正适合FTP协议.
 	
+		URLConnection对象不能在你的程序中直接创建.作为替代,你可以为指定资源建立一个URL
+	对象并调用这个URL的openConnection()方法.这个方法会返回给你一个URLConnection.之后通过
+	getInputStream()方法可以读取这个URL中的数据.()
+	</pre>
 	<pre class="code" >
 	public URL(String url) throws MalformedURLException
 	public URL(String protocol, String host, String file)
