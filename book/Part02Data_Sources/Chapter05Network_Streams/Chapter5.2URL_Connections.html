@@ -1,19 +1,24 @@
 ﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>Chapter5.1 URLs</title>
+    <title>Chapter5.2 URL Connections</title>
 	<link rel="stylesheet" type="text/css" href="../../styles.css">
 	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
 	<script language="javascript" src="../../highlight/prettify.js" ></script>
   </head>
   
   <body onload="prettyPrint()" >
-	<h2>Chapter 5.1 URL</h2>
+	<h2>Chapter 5.2 URL Connections</h2>
 	<pre >
-		java.net.URL类代表统一资源定位符(Uniform Resource Locator)比如如下的地址:
-	http://www.cafeaulait.org/books/javaio2/.每个URL都确切的对应一个资源在互联网上的位置.URL
-	类有6个构造函数.每个都声明会抛出MalformedURLException,一个IOException的子类.
+		顾名思义,URL Connection与URL密切相关.实际上,你可以通过调用URL对象的openConnection()
+	方法来获取一个URLConnection对象的引用;从很多方面来讲,URL类只是URLConnection类的包装.URL
+	Connection 提供了在服务器与客户端通讯时更多的控制.特别是URLConnection不仅提供了客户端
+	可以用来读取服务器数据的输入流,也提供了可以让客户端向服务器发送数据的输出流.
+	
+		java.net.URLConnection是一个用于处理与不同服务器通讯的抽象类,例如FTP服务器或网络
+	服务器.基于特定协议的位于sun包下的URLConnection子类,用于处理不同类型的服务器.
 	</pre>
+	
 	<pre class="code" >
 	public URL(String url) throws MalformedURLException
 	public URL(String protocol, String host, String file)
