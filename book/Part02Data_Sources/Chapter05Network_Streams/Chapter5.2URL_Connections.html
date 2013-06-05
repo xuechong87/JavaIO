@@ -49,9 +49,26 @@
 	  System.out.write(c);
 	}
 	</pre>
-	<h3>5.2.2 从URL Connection中读取数据</h3>
+	<h3>5.2.2 向URL Connection中写入数据</h3>
 	<pre>
-		
+		向一个URLConnection写入数据要比从中读取数据来得简单.但是,你必须先告诉它你想要
+	用这个URLConnection来输出.然后,与写入数据时获取其输入流并读取不同的,你应该获取连接的
+	输出流,并向其写入.这经常被用在在HTTP POST和PUT中.向一个URLConnection写入数据需要以下
+	几步:
+		<b>
+		1 构造URL对象
+		2 调用URL对象的openConnection()方法来创建URLConnection对象.
+		3 向setDoOutput()方法中传入true声明这个URLConnection会被用作输出.
+		4 如果你也想从流中读取输入,那么调用setDoInput(true)声明这个URLConnection会被
+			用作输入
+		5 创建你想要发送的数据,最好是一个byte数组.
+		6 调用getOutputStream方法获取一个输出流对象.将第5步中得出的byte数组写入到流中.
+		7 关闭输出流
+		8 调用getIntputStream()方法获取一个输入流对象.像平常那样读写这个流.
+		</b>
+		示例5-2用了这些步骤实现了一个简单的邮件客户端.它格从输入的email地址转换出一个
+	mailto URL.消息的输入通过StreamCopier工具由System.in复制到URLConnection中.用流结束
+	字符作为消息的结尾.
 	</pre>
 	<h4>示例 5-2 The The MailClient class</h4>
 	<pre class="prettyprint">
@@ -81,6 +98,22 @@
 		}
 	}
 	</pre>
-	
+	<pre>
+		例如,想要给本书的作者发邮件的话:
+	</pre>
+	<pre class="code">
+		$ java MailClient elharo@metalab.unc.edu
+		hi there!
+		^D
+	</pre>
+	<pre>
+		MailClient受到了一些限制.更正常的检测消息结尾的方式应该是让它自己去找一行的结束.
+	先不说正确与否,这种风格的用户界面实在是太过时了,所以我没有去刻意实现它.如果想要正确的
+	实现这些,你需要用到Reader和Writer.我们会在第二十章讨论他们.更进一步的说,它只能工作在
+	支持mailto协议的Java环境中;所以他可以在Sun的JDK中运行,但可能在其他VM中不行.它还需要本
+	地主机运行着一个SMTP服务器或者系统属性mail.host包含了一个可访问的SMTP服务器地址,又或者
+	在本地域名为mailhost的主机上运行着一个SMTP服务器.最后,安全管理员必须允许指向那个服务器
+	的网络连接,当然一般情况下在应用程序中这不是个问题.
+	</pre>
   </body>
 </html>
