@@ -1,0 +1,141 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter5.1 URLs</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body onload="prettyPrint()" >
+	<h2>Chapter 5.1 URL</h2>
+	<pre >
+		java.net.URL类代表统一资源定位符(Uniform Resource Locator)比如如下的地址:
+	http://www.cafeaulait.org/books/javaio2/.每个URL都确切的对应一个资源在互联网上的位置.URL
+	类有6个构造函数.每个都声明会抛出MalformedURLException,一个IOException的子类.
+	</pre>
+	<pre class="code" >
+	public URL(String url) throws MalformedURLException
+	public URL(String protocol, String host, String file)
+		throws MalformedURLException
+	public URL(String protocol, String host, int port, String file)
+		throws MalformedURLException
+	public URL(String protocol, String host, int port, String file,
+		URLStreamHandler handler)  throws MalformedURLException
+	public URL(URL context, String url) throws MalformedURLException
+	public URL(URL context, String url, URLStreamHandler handler)
+		throws MalformedURLException
+	</pre>
+	<pre>
+		每个构造函数都会在其参数没有指定一个有效的URL的时候抛出MalformedURLException.通常
+	来说,这意味着一个特定的Java实现没有匹配一个正确的已安装的协议处理程序.那么通过一个绝对
+	URL比如http://www.poly.edu/schedule/fall2006/bgrad.html#cs,你可以用以下方式来创建一个
+	URL对象:
+	</pre>
+	<pre class="code">
+	URL u = null;
+	try {
+		u = new URL("http://www.poly.edu/schedule/fall2006/bgrad.html#cs");
+	}
+	catch (MalformedURLException ex) {
+		// this shouldn't happen for a syntactically correct http URL
+	}
+	</pre>
+	<pre>
+	你也可以通过把它的每个部分来创建一个URL对象
+	</pre>
+	<pre class="code">
+	URL u = new URL("http", "www.poly.edu", "/schedule/ fall2006/bgrad.html#cs");
+	</pre>
+	<pre>
+		你通常不需要制定一个URL的端口号.大多数协议有默认的端口.比如HTTP是80端口.但是
+	有时候端口号会改变,那么你可以使用这个构造函数:
+	</pre>
+	<pre class="code">
+	URL u = new URL("http", "www.poly.edu", 80, "/schedule/ fall2006/bgrad.html#cs ");
+	</pre>
+	<pre>
+		最后的,很多HTML文件包含了相对URL.最后两个构造函数可以创建指定URL的相对URL,在转换
+	HTML文件的时候非常有用.例如,如下的代码创建了一个指向08.html文件的URL,其余部分由传入的
+	ul参数来补充:
+	</pre>
+	<pre class="code">
+	URL u1 = new URL("http://www.cafeaualit.org/course/week12/07.html");
+	URL u2 = new URL(u1, "08.html");
+	</pre>
+	<pre>
+		一旦一个URL对象被创建,你可以通过两种方式查询它的数据.openStream()方法返回源文件的
+	原始字节流.getContent()方法返回一个代表数据的Java对象.当你调用getContent().Java会去找与
+	数据MIME类型匹配的内容处理器(handler).在这本书里我们只关心openStream()方法.
+	
+		openStream()方法建立了一个与URL中指定的服务器和端口匹配的socket连接.你可以从它返回
+	的输入流来读取URL的数据.在实际数据内容前的任何头信息都会在流打开前被剥离.你得到的只有
+	原始数据.
+	</pre>
+	<pre class="code">
+	public InputStream openStream( ) throws IOException
+	</pre>
+	<pre>
+		示例5-1向你展示了如何与一个从命令行输入的URL连接,下载它的数据并拷贝到System.out中
+	</pre>
+	<h4>示例 5-1 The URLTyper program</h4>
+	<pre class="prettyprint">
+	
+	import java.net.*;
+	import java.io.*;
+	
+	public class URLTyper {
+		public static void main(String[] args) throws IOException {
+			if (args.length != 1) {
+				System.err.println("Usage: java URLTyper url");
+				return;
+			}
+			InputStream in = null;
+			try {
+				URL u = new URL(args[0]);
+				in = u.openStream( );
+				for (int c = in.read(); c != -1; c = in.read( )) {
+					System.out.write(c);
+				}
+			}
+			catch (MalformedURLException ex) {
+				System.err.println(args[0] + " is not a URL Java understands.");
+			}
+			finally {
+				if (in != null) in.close( );
+			}
+		}
+	}
+	</pre>
+	<pre>
+		例如,这是你连接到http://www.oreilly.com/时看到的最开始几行
+	</pre>
+	<pre class="code">
+	$ java URLTyper http://www.oreilly.com/
+	&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"&gt;
+	&lt;html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US"&gt;
+	&lt;head&gt;
+	&lt;title&gt;oreilly.com -- Welcome to O'Reilly Media, Inc. -- computer books, softwar
+	e conferences, online publishing&lt;/title&gt;
+	&lt;meta name="keywords" content="O'Reilly, oreilly, computer books,
+	technical books, UNIX, unix, Perl, Java, Linux, Internet, Web, C, C++, Windows,
+	Windows NT, Security, Sys Admin, System Administration, Oracle, PL/SQL, online b
+	ooks, books online, computer book online, e-books, ebooks, Perl Conference, Open
+	 Source Conference, Java Conference, open source, free software, XML, Mac OS X,
+	.Net, dot net, C#, PHP, CGI, VB, VB Script, Java Script, javascript, Windows 200
+	0, XP, bioinformatics, web services, p2p" /&gt;
+	...
+	</pre>
+	<pre>
+		大多数网络连接,甚至局域网连接,比文件数据源要更慢和不稳定.跨越互联网的连接要更慢和
+	不稳定,通过调制解调器的连接也是一样.在这些情况下提高性能的方法之一就是使用缓存:把尽量多的
+	数据读到类内部的临时存储数组中,然后按需要打包输出.在下一章你将要学到的BufferedInputStream
+	类正式这么做的.
+		
+		不被信任的代码会在安全管理器的控制下运行,在浏览器中运行的applet通常只被允许与它们
+	被下载来的主机建立连接.这个主机可以由Applet类的getCodeBase()方法中返回的URL中得到.尝试连接
+	其他主机会抛出安全异常.你可以创建指向其他主机的URL,但是你可能不能用openStream()或其他任何
+	方法从这些主机上下载数据.(对于applet的这个安全规则适用于任何网络连接,无论你是怎么得到它的)
+	</pre>
+  </body>
+</html>

@@ -1,0 +1,119 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter5.2 URL Connections</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body onload="prettyPrint()" >
+	<h2>Chapter 5.2 URL Connections</h2>
+	<pre >
+		顾名思义,URL Connection与URL密切相关.实际上,你可以通过调用URL对象的openConnection()
+	方法来获取一个URLConnection对象的引用;从很多方面来讲,URL类只是URLConnection类的包装.URL
+	Connection 提供了在服务器与客户端通讯时更多的控制.特别是URLConnection不仅提供了客户端
+	可以用来读取服务器数据的输入流,也提供了可以让客户端向服务器发送数据的输出流.
+	
+		java.net.URLConnection是一个用于处理与不同服务器通讯的抽象类,例如FTP服务器或网络
+	服务器.基于特定协议的位于sun包下的URLConnection子类,用于处理不同类型的服务器.
+	</pre>
+	<h3>5.2.1 从URL Connection中读取数据</h3>
+	<pre>
+		使用URLConnection读取数据需要五个步骤:
+		<b>
+		1. URL对象的创建
+		2. URL对象的openConnection()方法调用创建URLConnection对象
+		3. 设置客户端要发送的服务器的连接参数和请求的属性.
+		4. 用connect()方法连接服务器,也许是用socke连接网络或者用文件输入流连接本地.从服务器
+		  返回的响应的头信息读取完毕.
+		5. URLConnection的数据可通过getInputStream()方法返回的输入流读取,并可以通过
+		   getContent()方法返回的内容处理器来读取.数据也可以通过getOutputStream()所返回的
+		   输出流发送到服务器
+		</b>
+		这个流程很大程度上是基于HTTP协议的.它可以满足基于HTTP/1.0的"请求,响应,关闭连接"
+	模式,但不能满足有更多交互的"请求,响应,请求,响应,请求,响应"模式.输出流发送到服务器.特
+	别是它并不是真正适合FTP协议.
+	
+		URLConnection对象不能在你的程序中直接创建.作为替代,你可以为指定资源建立一个URL
+	对象并调用这个URL的openConnection()方法.这个方法会返回给你一个URLConnection.之后通过
+	getInputStream()方法可以读取这个URL中的数据.(URL类中的openStream()方法只是URLConnection
+	类中getInputStream()方法再包了层皮)如果连接不能被打开,比如远程主机无法连接,connect()
+	方法会抛出一个IOException.比如.如下的代码用URLConnection重现了了示例5-1以打开连接:
+	</pre>
+	<pre class="code" >
+	URL u = new URL(args[0]);
+	URLConnection connection = u.openConnection( );
+	in = connection.getInputStream( );
+	for (int c = in.read(); c != -1; c = in.read( )) {
+	  System.out.write(c);
+	}
+	</pre>
+	<h3>5.2.2 向URL Connection中写入数据</h3>
+	<pre>
+		向一个URLConnection写入数据要比从中读取数据来得简单.但是,你必须先告诉它你想要
+	用这个URLConnection来输出.然后,与写入数据时获取其输入流并读取不同的,你应该获取连接的
+	输出流,并向其写入.这经常被用在在HTTP POST和PUT中.向一个URLConnection写入数据需要以下
+	几步:
+		<b>
+		1 构造URL对象
+		2 调用URL对象的openConnection()方法来创建URLConnection对象.
+		3 向setDoOutput()方法中传入true声明这个URLConnection会被用作输出.
+		4 如果你也想从流中读取输入,那么调用setDoInput(true)声明这个URLConnection会被
+			用作输入
+		5 创建你想要发送的数据,最好是一个byte数组.
+		6 调用getOutputStream方法获取一个输出流对象.将第5步中得出的byte数组写入到流中.
+		7 关闭输出流
+		8 调用getIntputStream()方法获取一个输入流对象.像平常那样读写这个流.
+		</b>
+		示例5-2用了这些步骤实现了一个简单的邮件客户端.它格从输入的email地址转换出一个
+	mailto URL.消息的输入通过StreamCopier工具由System.in复制到URLConnection中.用流结束
+	字符作为消息的结尾.
+	</pre>
+	<h4>示例 5-2 The The MailClient class</h4>
+	<pre class="prettyprint">
+	import java.net.*;
+	import java.io.*;
+	
+	public class MailClient {
+		public static void main(String[] args) {
+			if (args.length == 0) {
+				System.err.println("Usage: java MailClient username@host.com");
+				return;
+			}
+			try {
+				URL u = new URL("mailto:" + args[0]);
+				URLConnection uc = u.openConnection( );
+				uc.setDoOutput(true);
+				uc.connect( );
+				OutputStream out = uc.getOutputStream( );
+				for (int c = System.in.read(); c != -1; c = System.in.read( )) {
+					out.write(c);
+				}
+				out.close( );
+			}
+			catch (IOException ex) {
+				System.err.println(ex);
+			}
+		}
+	}
+	</pre>
+	<pre>
+		例如,想要给本书的作者发邮件的话:
+	</pre>
+	<pre class="code">
+		$ java MailClient elharo@metalab.unc.edu
+		hi there!
+		^D
+	</pre>
+	<pre>
+		MailClient受到了一些限制.更正常的检测消息结尾的方式应该是让它自己去找一行的结束.
+	先不说正确与否,这种风格的用户界面实在是太过时了,所以我没有去刻意实现它.如果想要正确的
+	实现这些,你需要用到Reader和Writer.我们会在第二十章讨论他们.更进一步的说,它只能工作在
+	支持mailto协议的Java环境中;所以他可以在Sun的JDK中运行,但可能在其他VM中不行.它还需要本
+	地主机运行着一个SMTP服务器或者系统属性mail.host包含了一个可访问的SMTP服务器地址,又或者
+	在本地域名为mailhost的主机上运行着一个SMTP服务器.最后,安全管理员必须允许指向那个服务器
+	的网络连接,当然一般情况下在应用程序中这不是个问题.
+	</pre>
+  </body>
+</html>
