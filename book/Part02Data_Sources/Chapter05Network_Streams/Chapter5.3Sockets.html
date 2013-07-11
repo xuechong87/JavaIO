@@ -1,0 +1,46 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter 5.3 Sockets</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body onload="prettyPrint()" >
+	<h2>Chapter 5.3 Sockets</h2>
+	<pre >
+		当数据通过网络被从一个主机发送到另一个之前,它会被分割成不同但有限大小的数据包,
+	这被称为数据报(datagram).数据报的大小从几十到大概60,000字节不等.任何更大的和通常遇
+	到的比这更小的东西,在它们被传输前都必须被分割成更小的包.这样做的好处是,如果一个包在
+	传输时丢失了,可以在不用重新传输其他包的情况下重新发送这个包.还有就是,如果数据包到达
+	的顺序是乱的,它们可以在连接的接收端被重新排序.
+	
+		幸运的是,包对Java程序员来讲是隐形的.主机的本地(native)网络软件会在发送端把数据
+	分割成包,并在接收端将包重组.相对的,Java程序员有一个更高级的抽象被称为套接字(socket)
+	socket给两个主机间提供了可靠的用来传输数据的连接.它也让你从具体的数据包编码,丢包和
+	重发,以及重组接收到的乱序数据包等等细节中解放出来.一个socket可以执行四个基本的操作:
+		<b>
+		*连接到一个远程主机
+		*发送数据
+		*接收数据
+		*关闭连接
+		</b>
+		一个socket不能连接超过一台远程主机.但是socket可以向其连接的主机发送数据和接收
+	远程主机的数据.
+	
+		java.net.Socket类是Java网络套接字的接口,它能让你执行所有四个基本操作.
+	</pre>
+	
+
+	<pre class="code" >
+
+	</pre>
+	
+	<pre class="prettyprint">
+	
+	</pre>
+	
+	</pre>
+  </body>
+</html>
