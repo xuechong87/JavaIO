@@ -2,9 +2,16 @@
 	line-height:22px;
 	background-color: #555;
 	color:white;
+	
 }
 h1,h2,h3,h4{
 	color:#ffa0a0;
+}
+pre{
+	font-size:16px;
+	text-indent:0px;
+	letter-spacing:1px;
+	line-height:23px;
 }
 a{
 	color:#87ceeb;
@@ -13,6 +20,7 @@ a{
 	border:gray 1px solid;
 	color:#87ceeb;
 	background-color: #333;
+	
 }
 .code{
 	color:#87ceeb;
