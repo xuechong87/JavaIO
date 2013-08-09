@@ -67,7 +67,24 @@
 	}
 	</pre>
 	<pre>
+		用通道代替流的话,我们可以用一个线程实现整个程序并支持同时启动多个客户端.最开始的步骤
+	如下:
 	
+		1.打开一个ServerSocketChannel
+		2.把这个通道设置成非阻塞模式
+		3.打开一个Selector
+		4.将ServerSocketChannel注册到接收操作的Selector中
+		
+		想建立一个非阻塞的通道,首先用平常的方式打开server socket:
+		
+		ServerSocketChannel server = ServerSocketChannel.open( );
+		
+		然后往configureBlocking()方法里面传个true将它设置成非阻塞模式:
+		
+		server.configureBlocking(false);
+
+		然后创建一个Selector对象
+		
 	</pre>
   </body>
 </html>
