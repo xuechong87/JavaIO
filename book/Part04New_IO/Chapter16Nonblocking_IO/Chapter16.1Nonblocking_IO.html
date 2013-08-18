@@ -80,11 +80,28 @@
 		ServerSocketChannel server = ServerSocketChannel.open( );
 		
 		然后往configureBlocking()方法里面传个true将它设置成非阻塞模式:
-		
-		server.configureBlocking(false);
+		<pre class="code">
+			server.configureBlocking(false);</pre>
+		然后创建一个Selector对象:
+		<pre class="code">
+			Selector selector = Selector.open( );</pre>
 
-		然后创建一个Selector对象
-		
+		这个对象会负责管理所有不同的通道,并决定哪一个已经准备好了读写.最开始你只有一个
+	server socket channel.当你把每一个通道注册到Selector上时,你就必须指定你注册的操作类型.
+	一共有四种类型,每一种都由SelectionKey类中的常量代表:
+	
+		SelectionKey.ACCEPT
+		从客户端接受一个连接
+
+		SelectionKey.CONNECT
+		打开一个连接指定服务器的连接
+
+		SelectionKey.READ
+		从通道中读取数据
+
+		SelectionKey.WRITE
+		向通道中写入数据
+
 	</pre>
   </body>
 </html>
