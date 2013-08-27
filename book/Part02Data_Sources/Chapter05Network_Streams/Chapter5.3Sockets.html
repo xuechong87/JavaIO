@@ -29,12 +29,24 @@
 		一个socket不能连接超过一台远程主机.但是socket可以向其连接的主机发送数据和接收
 	远程主机的数据.
 	
-		java.net.Socket类是Java网络套接字的接口,它能让你执行所有四个基本操作.
-	</pre>
+		java.net.Socket类是Java网络套接字的接口,它能让你执行所有四个基本操作.它能在
+	两个主机时间提供原生的未被解释的连接.你可以连接到远程主机;你可以发送数据;接收数据;
+	关闭连接.与URL和URLConnection不同,协议的部分没有被抽象出来.程序员要完全负责客户端与
+	服务器的交互.
 	
-
+		想要打开一个连接,使用Socket构造函数中的一个,指定你想要连接的主机.每个Socket
+	对象都与一个特定的主机向关联.想要连接另外的主机,你必须创建一个新的Socket对象:
+	</pre>
 	<pre class="code" >
+		public Socket(String host, int port )throws UnknownHostException, IOException
+		
+		public Socket(InetAddress address, int port) throws IOException
 
+		public Socket(String host, int port, InetAddress localAddress, int localPort) 
+		throws IOException
+		
+		public Socket(InetAddress address, int port, InetAddress localAddress,
+		int localPort) throws IOException
 	</pre>
 	
 	<pre class="prettyprint">
