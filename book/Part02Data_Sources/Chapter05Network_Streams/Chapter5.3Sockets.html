@@ -48,11 +48,21 @@
 		public Socket(InetAddress address, int port, InetAddress localAddress,
 		int localPort) throws IOException
 	</pre>
+	<pre>
+		host参数应该是一个类似"www.oreilly.com"或者"duke.poly.edu"这样表示要连接的特定
+	主机的字符串.它也可能是用点来分开的数字例如"199.1.32.90".这个参数也可以传入一个
+	java.net.InetAddress对象.
 	
+		port参数是要连接的远程主机的端口号.电脑的网络接口被逻辑划分为65536个不同的端口.
+	当数据在互联网中以包的形式传送时,每个包都附带了它要去的主机地址和端口号.主机会从每个
+	接收到的数据包中读取端口号.以决定由那个程序接收这些数据.很多服务都运行在一些众人皆知
+	的端口号上.比如HTTP服务器基本上都会监听80端口.
+	
+	</pre>
 	<pre class="prettyprint">
 	
 	</pre>
 	
-	</pre>
+	
   </body>
 </html>
