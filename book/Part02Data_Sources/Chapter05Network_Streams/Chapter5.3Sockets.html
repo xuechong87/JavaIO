@@ -58,9 +58,75 @@
 	接收到的数据包中读取端口号.以决定由那个程序接收这些数据.很多服务都运行在一些众人皆知
 	的端口号上.比如HTTP服务器基本上都会监听80端口.
 	
+		可选的参数localAddress和localPort指定了从哪个地址和本地主机的哪个端口来连接socket
+	前提是有多个选择的情况.大多数主机有很多可用的端口,但一般只有一个地址.这两个参数是可选的
+	如果没有填写,构造函数会自动选择合适的值.
+	
+		数据通过socket以流的方式发送.以下是从socket获取两种流的方法:
+	</pre>
+	<pre class="code">
+		public InputStream  getInputStream( ) throws IOException
+		
+		public OutputStream getOutputStream( ) throws IOException
+	</pre>
+	<pre>
+		这是关闭socket的方法:
+	</pre>
+	<pre class="code">
+		public void close( ) throws IOException
+	</pre>
+	<pre>
+		这也同样会关闭soket的输入流和输出流.任何在socket关闭之后对其输入输出流的读写都会
+	导致一个IOException.
+	
+		示例5-3
+	<b>示例 5-3. The SocketTyper program</b>
 	</pre>
 	<pre class="prettyprint">
 	
+	import java.net.*;
+	import java.io.*;
+	
+	public class SocketTyper {
+		public static void main(String[] args) throws IOException {
+			if (args.length != 1) {
+				System.err.println("Usage: java SocketTyper url1");
+				return;
+			}
+			URL u = new URL(args[0]);
+			if (!u.getProtocol( ).equalsIgnoreCase("http")) {
+				System.err.println("Sorry, " + u.getProtocol( )
+				+ " is not supported");
+				return;
+			}
+			String host = u.getHost( );
+			int port    = u.getPort( );
+			String file = u.getFile( );
+			if (file == null) file = "/";
+			// default port
+			if (port <= 0) port = 80;
+			Socket s = null;
+			try {
+				s = new Socket(host, port);
+				String request = "GET " + file + " HTTP/1.1\r\n"
+				+ "User-Agent: SocketTyper\r\n"
+				+ "Accept: text/*\r\n"
+				+ "Host: " + host + "\r\n"
+				+ "\r\n";
+				byte[] b = request.getBytes("US-ASCII");
+				OutputStream out = s.getOutputStream( );
+				InputStream in = s.getInputStream( );
+				out.write(b);
+				out.flush( );
+				for (int c = in.read(); c != -1; c = in.read( )) {
+					System.out.write(c);
+				}
+			}
+			finally {
+			  if (s != null && s.isConnected()) s.close( );
+			}
+		}
+	}
 	</pre>
 	
 	
