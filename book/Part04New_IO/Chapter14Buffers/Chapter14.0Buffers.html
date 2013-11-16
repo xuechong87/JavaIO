@@ -1,0 +1,26 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter14.0 Buffers</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body onload="prettyPrint()" >
+	<h1>Chapter14.0 Buffers</h1>
+
+	<pre >
+		传统的同步I/O是为了传统程序设计的.这些程序都有以下的特点</pre>
+	<pre class="code" >
+		*文件可能比较大,但不会非常大,把整个文件都读取到内存中是可行的
+		*一个程序同时从网络连接读写的内容是较少的,理想状态下同一时间只会使用一个流
+		*程序是顺序执行的.它在完成读/写一个文件之前不会做太多其他事
+	</pre>
+	<pre>
+		因为有这些特点,使用基于流的I/O更快并且操作更有效率.但是.如果违背了这些
+	先决条件,基本的I/O某型就开始展现出弱点.例如,网络服务器经常需要同时处理成百上
+	千的连接.科研,工程,和媒体程序经常需要处理几G级别的数据量.
+	</pre>
+  </body>
+</html>
