@@ -1,83 +1,72 @@
-[
-	{
-		"chap":"Chapter01 Introducing I/O",
-		"basePath":"Part01Basic_IO/Chapter01Introducing_IO",
-		"contents":[
-			{"title":"Chapter1.0Introducing_IO"},
-			{"title":"Chapter1.1What_Is_a_Stream"},
-			{"title":"Chapter1.2Numeric_Data"},
-			{"title":"Chapter1.3Character_Data"},
-			{"title":"Chapter1.4Readers_and_Writers"},
-			{"title":"Chapter1.5Buffers_and_Channels"},
-			{"title":"Chapter1.6The_Ubiquitous_IOException"},
-			{"title":"Chapter1.7The_Console"},
-			{"title":"Chapter1.8Security_Checks"}
-		]
-	},
-	{
-		"chap":"Chapter02 Output Streams",
-		"basePath":"Part01Basic_IO/Chapter02Output_Streams",
-		"contents":[
-			{"title":"Chapter2.0Output_Streams"},
-			{"title":"Chapter2.1Writing_Bytes_to_Output_Streams"},
-			{"title":"Chapter2.2Writing_Arrays_of_Bytes"},
-			{"title":"Chapter2.3Closing_Output_Streams"},
-			{"title":"Chapter2.4Flushing_Output_Streams"},
-			{"title":"Chapter2.5Subclassing_OutputStream"},
-			{"title":"Chapter2.6A_Graphical_User_Interface_for_Output_Streams"}
-		]
-	},
-	{
-		"chap":"Chapter03 Input Streams",
-		"basePath":"Part01Basic_IO/Chapter03Input_Streams",
-		"contents":[
-			{"title":"Chapter3.0Input_Streams"},
-			{"title":"Chapter3.1The_read_Method"},
-			{"title":"Chapter3.2Reading_Chunks_of_Data_from_a_Stream"},
-			{"title":"Chapter3.3Counting_the_Available_Bytes"},
-			{"title":"Chapter3.4Skipping_Bytes"},
-			{"title":"Chapter3.5Closing_Input_Streams"},
-			{"title":"Chapter3.6Marking_and_Resetting"},
-			{"title":"Chapter3.7Subclassing_InputStream"},
-			{"title":"Chapter3.8An_Efficient_Stream_Copier"}
-		]
-	},
-	{
-		"chap":"Chapter04 File Streams",
-		"basePath":"Part02Data_Sources/Chapter04File_Streams",
-		"contents":[
-			{"title":"Chapter4.0File_Streams"},
-			{"title":"Chapter4.1Reading_Files"},
-			{"title":"Chapter4.2Writing_Files"},
-			{"title":"Chapter4.3File_Viewer"}
-		]
-	},
-	{
-		"chap":"Chapter05 Network Streams",
-		"basePath":"Part02Data_Sources/Chapter05Network_Streams",
-		"contents":[
-			{"title":"Chapter5.0Network_Streams"},
-			{"title":"Chapter5.1URLs"},
-			{"title":"Chapter5.2URL_Connections"},
-			{"title":"Chapter5.3Sockets"}
-		]
-	},
-	{
-		"chap":"Chapter14 Buffers",
-		"basePath":"Part04New_IO/Chapter14Buffers",
-		"contents":[
-			{"title":"Chapter14.0Buffers"}
-		]
-	},
-	{
-		"chap":"Chapter16 Nonblocking I/O",
-		"basePath":"Part04New_IO/Chapter16Nonblocking_IO",
-		"contents":[
-			{"title":"Chapter16.0Nonblocking_IO"},
-			{"title":"Chapter16.1Nonblocking_IO"}
-		]
-	}
-
-
-
+[	{
+	"chap":"Chapter01Introducing_IO",
+	"basePath":"Part01Basic_IO/Chapter01Introducing_IO",
+	"contents":[	{"title":"Chapter1.0Introducing_IO"}
+,	{"title":"Chapter1.1What_Is_a_Stream"}
+,	{"title":"Chapter1.2Numeric_Data"}
+,	{"title":"Chapter1.3Character_Data"}
+,	{"title":"Chapter1.4Readers_and_Writers"}
+,	{"title":"Chapter1.5Buffers_and_Channels"}
+,	{"title":"Chapter1.6The_Ubiquitous_IOException"}
+,	{"title":"Chapter1.7The_Console"}
+,	{"title":"Chapter1.8Security_Checks"}
+]
+}
+,	{
+	"chap":"Chapter02Output_Streams",
+	"basePath":"Part01Basic_IO/Chapter02Output_Streams",
+	"contents":[	{"title":"Chapter2.0Output_Streams"}
+,	{"title":"Chapter2.1Writing_Bytes_to_Output_Streams"}
+,	{"title":"Chapter2.2Writing_Arrays_of_Bytes"}
+,	{"title":"Chapter2.3Closing_Output_Streams"}
+,	{"title":"Chapter2.4Flushing_Output_Streams"}
+,	{"title":"Chapter2.5Subclassing_OutputStream"}
+,	{"title":"Chapter2.6A_Graphical_User_Interface_for_Output_Streams"}
+]
+}
+,	{
+	"chap":"Chapter03Input_Streams",
+	"basePath":"Part01Basic_IO/Chapter03Input_Streams",
+	"contents":[	{"title":"Chapter3.0Input_Streams"}
+,	{"title":"Chapter3.1The_read_Method "}
+,	{"title":"Chapter3.2Reading_Chunks_of_Data_from_a_Stream"}
+,	{"title":"Chapter3.3Counting_the_Available_Bytes"}
+,	{"title":"Chapter3.4Skipping_Bytes"}
+,	{"title":"Chapter3.5Closing_Input_Streams"}
+,	{"title":"Chapter3.6Marking_and_Resetting"}
+,	{"title":"Chapter3.7Subclassing_InputStream"}
+,	{"title":"Chapter3.8An_Efficient_Stream_Copier"}
+]
+}
+,	{
+	"chap":"Chapter04File_Streams",
+	"basePath":"Part02Data_Sources/Chapter04File_Streams",
+	"contents":[	{"title":"Chapter4.0File_Streams"}
+,	{"title":"Chapter4.1Reading_Files"}
+,	{"title":"Chapter4.2Writing_Files"}
+,	{"title":"Chapter4.3File_Viewer"}
+]
+}
+,	{
+	"chap":"Chapter05Network_Streams",
+	"basePath":"Part02Data_Sources/Chapter05Network_Streams",
+	"contents":[	{"title":"Chapter5.0Network_Streams"}
+,	{"title":"Chapter5.1URLs"}
+,	{"title":"Chapter5.2URL_Connections"}
+,	{"title":"Chapter5.3Sockets"}
+]
+}
+,	{
+	"chap":"Chapter14Buffers",
+	"basePath":"Part04New_IO/Chapter14Buffers",
+	"contents":[	{"title":"Chapter14.0Buffers"}
+]
+}
+,	{
+	"chap":"Chapter16Nonblocking_IO",
+	"basePath":"Part04New_IO/Chapter16Nonblocking_IO",
+	"contents":[	{"title":"Chapter16.0Nonblocking_IO"}
+,	{"title":"Chapter16.1Nonblocking_IO"}
+]
+}
 ]
