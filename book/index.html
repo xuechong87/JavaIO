@@ -14,7 +14,52 @@
 			function jump (src) {
 				$("#content_frame").attr('src',src);
 			}
+
+			function initNav(){
+				$.getJSON('contents.json',function(contents){
+					
+					for(var i = 0;i<contents.length;i++){
+						var navg = $("#navagations");
+						var chap = contents[i];
+						var panGroup = $("<div class='panel-group' "
+							+"id='accordion"+i+"'></div>");
+						var panenlIn = 
+							$("<div class='panel panel-inverse'></div>");
+
+						var panHead = $(
+							"<div class='panel-heading'>" +
+					      	"<h4 class='panel-title'>" +
+					        "<a data-toggle='collapse' " +
+					        "data-toggle='collapse' " +
+					        "data-parent='#accordion"+i+"' " +
+					        "href='#collapse"+i+"'> " +
+					        chap.chap+
+					        "</a>" +
+					      	"</h4>" +
+				    		"</div>");
+						panHead.appendTo(panenlIn);
+
+						var panBodyWarp = $("<div id='collapse"+i+
+							"' class='panel-collapse collapse'></div>");
+						var panBody = $("<div class='panel-body'></div>");
+						var arts = chap.contents;
+						for(var j=0;j<arts.length;j++){
+							$("<a href=\"javascript:jump('"
+								+ chap.basePath + "/" 
+								+ arts[j].title + ".html');\" >"
+								+ arts[j].title +
+							"</a><br/>").appendTo(panBody);
+						}
+						panBody.appendTo(panBodyWarp);
+						panBodyWarp.appendTo(panenlIn);
+
+						panenlIn.appendTo(panGroup);
+						panGroup.appendTo(navg);
+					}
+				});
+			}
 		</script>
+
 	</head>
 	<body>
 		<div class="container">
@@ -24,11 +69,22 @@
 
 				<h1>JavaIO </h1>
 				
-			  	<div class="alert">
-				  	这是一个大坑. 源码请见.
-					<a type="button" class="btn btn-primary btn-xs ">
+			  	<div class="alert" id="infos" >
+				  	这是一个大坑!!我不会定期更新!
+				  	查看源码和修正错误请移步
+					<a type="button" 
+					href="https://github.com/xuechong87/JavaIO"
+					target="blank"
+					class="btn btn-primary btn-xs">
 					github
 					</a>
+					<br/>
+					欢迎各种研讨性质的转载和分享,
+					如果这些对你有用,
+					请试着也把你自己的技术文档也分享给大家O(∩_∩)O
+					<a style="float:right;"
+					href="javascript:$('#infos').slideUp();"
+					>你可以隐藏这段废话</a>
 				</div>
 				
 				
@@ -38,7 +94,7 @@
 		<div class="row">
 			<div class="col-md-3" id="navagations" >
 
-				<div class="panel-group" id="accordion">
+				<!--<div class="panel-group" id="accordion">
 	 			 	<div class="panel panel-inverse">
 				    	<div class="panel-heading">
 					      	<h4 class="panel-title">
@@ -50,6 +106,7 @@
 					        </a>
 					      	</h4>
 				    	</div>
+
 	    				<div id="collapseOne" class="panel-collapse collapse in">
 				      	<div class="panel-body">
 				        	<a href="javascript:jump('Part01Basic_IO/Chapter01Introducing_IO/Chapter1.0Introducing_IO.html');"
@@ -58,30 +115,7 @@
 				      	</div>
 	    				</div>
 	  				</div>
-				</div>
-				<div class="panel-group" id="accordion1">
-	 			 	<div class="panel panel-inverse">
-				    	<div class="panel-heading">
-					      	<h4 class="panel-title">
-					        <a data-toggle="collapse" data-toggle="collapse" 
-					        data-parent="#accordion1" href="#collapseOne1"
-					        class=".active"
-					        >
-					          Collapsible Group Item #1
-					        </a>
-					      	</h4>
-				    	</div>
-	    				<div id="collapseOne1" class="panel-collapse collapse ">
-				      	<div class="panel-body">
-				        	<a href="javascript:jump('Part01Basic_IO/Chapter01Introducing_IO/Chapter1.0Introducing_IO.html');"
-				        	class=".active"
-				        	>asdasd</a>
-				      	</div>
-	    				</div>
-	  				</div>
-				</div>
-
-
+				</div>-->
 
 			</div>
 
@@ -95,7 +129,11 @@
 		
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="boot3/js/bootstrap.min.js"></script>
-		
+		<script type="text/javascript">
+		$(function(){
+			initNav();
+		});
+		</script>
   	</body>
 
 
