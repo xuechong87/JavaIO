@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<title>Chapter14.0 Buffers</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+</head>  
+<body onload="prettyPrint()" >
+	<h1>Chapter14.0 Buffers</h1>
+
+	<pre >
+		传统的同步I/O是为了传统程序设计的.这些程序都有以下的特点
+	</pre>
+	<pre class="code" >
+			*文件可能比较大,但不会非常大,把整个文件都读取到内存中是可行的
+			*一个程序同时从网络连接读写的内容是较少的,理想状态下同一时间只会使用一个流
+			*程序是顺序执行的.它在完成读/写一个文件之前不会做太多其他事
+	</pre>
+	<pre>
+		因为有这些特点,使用基于流的I/O更快并且操作更有效率.但是.如果违背了这些
+	先决条件,基本的I/O某型就开始展现出弱点.例如,网络服务器经常需要同时处理成百上
+	千的连接.科研,工程,和媒体程序经常需要处理几G级别的数据量.
+
+		Java 1.4引入了新的I/O模型,更多是为这种程序,而不是传统的I/O操作较少的程序
+	所设计.组成new I/O 库的类都在java.nio和它的子包中.new I/O模型没有取代传统的,
+	基于流的I/O.实际上.一些new I/O的API是基于流的.但是new I/O模型在这些富I/O操作的
+	程序中使用更加方便.
+
+		鉴于传统I/O模型是基于流的,new I/O模型则是基于缓存(buffer)和通道(channel)的
+	buffer类似于一个保存了要读写数据的数组(在一些实现中它可能真的是个数组).但是与
+	输出流和输入流甚至buffered input stream,buffered output stream不同之处在于,buffer
+	既可以用来读又可以用来写.输入通道(Input channel)用数据填满buffer,然后
+	输出通道(output channel)会进行读取.缓存不是通道的一部分,而是处于交换数据的通道的
+	中间位置.更进一步说,缓存是是通过方法访问的对象,所以它们并不是真的数组.它们可以用
+	内存的顶部或者磁盘来实现以提供极快的随机访问速度.对于适合类型的程序,有可能带来戏
+	剧性的性能提升.
+
+		不同的缓存有不同的元素类型,就像数组一样.例如,有byte buffer,int buffer,
+	float buffer,和char buffer.类库中并不包含String buffer 和Object buffer但是如果你
+	需要这些的话,可以自己实现.所有这些buffer都有相同的基本操作:
+	</pre>
+	<pre class="code">
+		*分配缓存(Allocate the buffer)
+
+		*向缓存中放入值(Put values in the buffer)
+
+		*从缓存中取出值(Get values from the buffer)
+
+		*重设缓存读取位置(Flip the buffer)
+
+		*清空缓存(Clear the buffer)
+
+		*倒回缓存的初始位置(Rewind the buffer)
+
+		*标记缓存(Mark the buffer)
+
+		*重置缓存(Reset the buffer)
+
+		*分割缓存(Slice the buffer)
+
+		*压缩缓存(Compact the buffer)
+
+		*复制缓存(Duplicate the buffer)
+	</pre>
+</body>
+</html>

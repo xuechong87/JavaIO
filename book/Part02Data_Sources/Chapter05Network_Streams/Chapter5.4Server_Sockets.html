@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Chapter 5.4 Server Sockets</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css">
+	<link rel="stylesheet" type="text/css" href="../../highlight/desert.css">
+	<script language="javascript" src="../../highlight/prettify.js" ></script>
+  </head>
+  
+  <body onload="prettyPrint()" >
+	<h2>Chapter 5.4 Server Sockets</h2>
+	<pre >
+		每个连接都有两端:发起连接的客户端,和响应连接的服务器.到现在为止我只讨论了客户端
+	一边的内容,并假设存在一个可以与客户端交流的服务器端.想要实现一个服务器,你需要写一个等待
+	其他主机连接的程序.一个绑定了本地机器(服务器)特定端口的server socket.然后用它监听远程
+	主机(客户端)传入的连接尝试.当服务器检测到一个连接的尝试attempt(),它接受(accept)这个连接
+	这就创建了一个用于在客户端和服务器端通信的socket.
+
+		多个客户端可以同时连接同一个服务器.传入的数据会依据呼叫的服务器端口以及其来
+	源的客户端地址与端口区分开来.服务器能通过检查数据到达的端口来判定哪个服务(比如HTTP或者
+	FTP)该处理这些数据.它能通过数据中存储的客户端地址与端口来决定该把响应发送到哪里.
+
+
+		每个server socket只能同时监听一个端口.由于一个服务器可能会需要同时处理很多链接,
+	服务器程序应该是多线程的.(当然也可以用非阻塞I/O替代.我们会在第16章讲到它).一般来讲,监听
+	端口的server socket只会接受连接(accept).它会将每个连接的实际处理过程交给不同不同的线程.
+	传入的连接在服务器能接受他们之前被存储在一个队列中.在大多数系统中,默认的队列长度大概在
+	5到50之间.一旦队列排满,更多的连接就会被拒绝,直到队列中重新有位置为止.
+
+		java.net.ServerSocket代表server socket.构造函数接收的参数为绑定的端口号,传入连接的
+	队列长度,和IP地址:
+	</pre>
+	<pre class="code">
+	public ServerSocket(int port) throws IOException
+
+	public ServerSocket(int port, int backlog) throws IOException
+
+	public ServerSocket(int port, int backlog, InetAddress bindAddr) throws IOException
+	</pre>
+	<pre>
+		通常你只需要指定要监听的端口:
+	</pre>
+	<pre class="code">
+	ServerSocket ss = new ServerSocket(80);
+	</pre>
+	<pre class="prettyprint">
+	</pre>
+
+	<pre class="code">
+
+	</pre>
+
+
+  </body>
+</html>
