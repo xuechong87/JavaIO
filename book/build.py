@@ -35,6 +35,9 @@ if __name__ == "__main__":
     contents = open(basePath + os.sep + "contents.json",'w')        
     contents.write(result);
     contents.close()
+
+    print ("OK")
+    input("end")
     pass
         
         

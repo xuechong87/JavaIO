@@ -4,10 +4,12 @@
 	color:white;
 	font-family: 微软雅黑;
 }
+
 h1,h2,h3,h4{
 	color:#ffa0a0;
-	font-family: 微软雅黑;
+	font-family:sans-serif;
 }
+
 pre{
 	font-size:16px;
 	text-indent:0px;
@@ -15,20 +17,24 @@ pre{
 	line-height:23px;
 	font-family: 微软雅黑;
 }
+
 a{
 	color:#87ceeb;
 }
+
 .annotation{
 	border:gray 1px solid;
 	color:#87ceeb;
 	background-color: #333;
 }
+
 .code{
 	font-family: consolas;
 	color:#87ceeb;
 	line-height:26px;
 	font-size:14px;
 }
+
 .prettyprint{
 	font-family: consolas;
 }
